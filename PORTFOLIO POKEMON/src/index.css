@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+@theme {
+  --font-pixel: "Press Start 2P", system-ui;
+  --font-sans: "Outfit", system-ui;
+
+  /* Pokémon Type Colors */
+  --color-poke-red: #ff0000;
+  --color-poke-blue: #3b4cca;
+  --color-poke-yellow: #ffde00;
+  --color-poke-gold: #b3a125;
+  --color-poke-dark: #0a0a0a;
+
+  --color-type-fire: #ff421c;
+  --color-type-water: #2980ef;
+  --color-type-grass: #62bc5a;
+  --color-type-electric: #fac000;
+  --color-type-psychic: #ef4179;
+  --color-type-ice: #3fd8ff;
+  --color-type-dragon: #503da4;
+  --color-type-dark: #3c2d23;
+  --color-type-fairy: #ef70ef;
+  --color-type-normal: #919191;
+  --color-type-fighting: #ff8000;
+  --color-type-flying: #81b9ef;
+  --color-type-poison: #9141cb;
+  --color-type-ground: #915121;
+  --color-type-rock: #afa981;
+  --color-type-bug: #91a119;
+  --color-type-ghost: #704170;
+  --color-type-steel: #60a1b8;
+
+  --animate-spin-slow: spin 3s linear infinite;
+  --animate-float: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+:root {
+  color: #ffffff;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+.font-pixel {
+  font-family: var(--font-pixel);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-poke-red);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #cc0000;
+}
+
+/* Scanline Effect */
+.scanlines {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%,
+      rgba(0, 0, 0, 0.1) 50%),
+    linear-gradient(90deg,
+      rgba(255, 0, 0, 0.02),
+      rgba(0, 255, 0, 0.01),
+      rgba(0, 0, 255, 0.02));
+  background-size: 100% 4px, 3px 100%;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.pixelated {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Background Enhancements */
+.bg-overlay {
+  background: radial-gradient(circle, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.4) 100%),
+    linear-gradient(to bottom, rgba(10, 10, 10, 0.2), rgba(10, 10, 10, 0.8));
+  pointer-events: none;
+}
+
+.bg-vignette {
+  box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.9);
+  pointer-events: none;
+}
+
+.glass-morphism {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
