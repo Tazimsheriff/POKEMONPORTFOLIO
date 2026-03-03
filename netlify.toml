@@ -1,0 +1,4 @@
+[build]
+  base = "PORTFOLIO POKEMON"
+  command = "npm install && npm run build"
+  publish = "dist"
