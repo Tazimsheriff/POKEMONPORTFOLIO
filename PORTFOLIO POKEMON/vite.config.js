@@ -8,4 +8,12 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  build: {
+    outDir: 'dist', // Ensure the output directory is correctly set
+  },
+  server: {
+    headers: {
+      'Content-Type': 'application/javascript', // Ensure correct MIME type for JavaScript files
+    },
+  },
 })
