@@ -6,14 +6,31 @@ import PokedexGrid from './components/PokedexGrid';
 import MoveList from './components/MoveList';
 import { GymBadges, PokemonCenter } from './components/Achievements';
 import { Volume2, VolumeX, Menu, X, ArrowUp } from 'lucide-react';
-import kantoMap from './KANTO.PNG';
+import kantoMap from './assets/maps/kanto.png';
+import johtoMap from './assets/maps/johto.png';
+import hoennMap from './assets/maps/hoenn.png';
 import JourneyPage from './components/JourneyPage';
+import CatchGame from './components/CatchGame';
+import FlyMenu from './components/FlyMenu';
 
 function App() {
   const [loading, setLoading] = useState(true);
   const [muted, setMuted] = useState(true);
   const [showNav, setShowNav] = useState(false);
   const [view, setView] = useState('home');
+  const [region, setRegion] = useState('kanto');
+  const [isTravelling, setIsTravelling] = useState(false);
+
+  const travelTo = (newRegion) => {
+    if (newRegion === region) return;
+    setIsTravelling(true);
+    setTimeout(() => {
+      setRegion(newRegion);
+      setTimeout(() => {
+        setIsTravelling(false);
+      }, 1000);
+    }, 1000);
+  };
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -50,11 +67,11 @@ function App() {
               {/* Enhanced Background Map */}
               <div className="fixed inset-0 z-[-10] overflow-hidden pointer-events-none">
                 <img
-                  src={kantoMap}
-                  alt="Kanto Map"
+                  src={region === 'johto' ? johtoMap : region === 'hoenn' ? hoennMap : kantoMap}
+                  alt="Region Map"
                   className={`w-full h-full object-cover pixelated transition-all duration-1000 ${view === 'journey'
-                      ? 'opacity-60 brightness-[0.8] scale-110'
-                      : 'opacity-40 brightness-[0.6] scale-105'
+                    ? 'opacity-60 brightness-[0.8] scale-110'
+                    : 'opacity-40 brightness-[0.6] scale-105'
                     }`}
                 />
                 <div className="absolute inset-0 bg-overlay" />
@@ -110,14 +127,22 @@ function App() {
                         { name: 'Pokedex', id: 'pokedex' },
                         { name: 'Moves', id: 'moves' },
                         { name: 'Badges', id: 'badges' },
+                        { name: 'Catch', id: 'catching' },
                         { name: 'Contact', id: 'contact' }
                       ].map((item) => (
                         <button
                           key={item.id}
                           onClick={() => {
                             setShowNav(false);
-                            const el = document.getElementById(item.id);
-                            if (el) el.scrollIntoView({ behavior: 'smooth' });
+                            if (item.id === 'catching') {
+                              setView('catching');
+                              return;
+                            }
+                            if (view !== 'home') setView('home');
+                            setTimeout(() => {
+                              const el = document.getElementById(item.id);
+                              if (el) el.scrollIntoView({ behavior: 'smooth' });
+                            }, 100);
                           }}
                           className="font-pixel text-xl md:text-3xl hover:text-poke-yellow transition-colors relative group"
                         >
@@ -139,17 +164,70 @@ function App() {
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                     >
-                      <TrainerCard onStartJourney={() => setView('journey')} />
-                      <PokedexGrid />
-                      <MoveList />
-                      <GymBadges />
-                      <PokemonCenter />
+                      <TrainerCard
+                        onStartJourney={() => setView('journey')}
+                        onStartCatching={() => setView('catching')}
+                        region={region}
+                      />
+                      <PokedexGrid region={region} />
+                      <MoveList region={region} />
+                      <GymBadges region={region} />
+                      <PokemonCenter region={region} />
                     </motion.div>
+                  ) : view === 'journey' ? (
+                    <JourneyPage key="journey" onBack={() => setView('home')} region={region} />
                   ) : (
-                    <JourneyPage key="journey" onBack={() => setView('home')} />
+                    <CatchGame key="catching" onBack={() => setView('home')} region={region} />
                   )}
                 </AnimatePresence>
               </main>
+
+              <FlyMenu currentRegion={region} onTravel={travelTo} />
+
+              <AnimatePresence>
+                {isTravelling && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="fixed inset-0 z-[2000] bg-black/80 backdrop-blur-lg flex flex-col items-center justify-center overflow-hidden"
+                  >
+                    <div className="absolute inset-0 opacity-20">
+                      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-poke-blue/20 rounded-full blur-3xl animate-pulse" />
+                      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-poke-red/20 rounded-full blur-3xl animate-pulse" />
+                    </div>
+
+                    <motion.div
+                      animate={{
+                        y: [0, -10, 0],
+                        rotate: [0, 5, -5, 0]
+                      }}
+                      transition={{ repeat: Infinity, duration: 2 }}
+                      className="relative mb-12"
+                    >
+                      <div className="w-48 h-48 rounded-full bg-white/5 border-4 border-white/10 flex items-center justify-center p-8">
+                        <img
+                          src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${region === 'kanto' ? 149 : region === 'johto' ? 249 : 384}.png`}
+                          alt="Legendary"
+                          className="w-full h-full object-contain drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]"
+                        />
+                      </div>
+                      <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-poke-red px-6 py-2 rounded-full border-2 border-white shadow-xl">
+                        <span className="font-pixel text-[10px] text-white">FLYING...</span>
+                      </div>
+                    </motion.div>
+
+                    <h2 className="font-pixel text-2xl md:text-3xl text-white uppercase tracking-tighter mb-4 animate-pulse">
+                      Travelling to <span className={
+                        region === 'johto' ? 'text-poke-yellow' :
+                          region === 'hoenn' ? 'text-poke-blue' :
+                            'text-poke-red'
+                      }>{region.toUpperCase()}...</span>
+                    </h2>
+                    <p className="font-pixel text-[8px] text-gray-500 uppercase tracking-widest">Hold on tight, Trainer!</p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
               {/* Footer */}
               <footer className="py-12 border-t border-white/5 flex flex-col items-center gap-6">

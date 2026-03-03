@@ -1,156 +1,241 @@
 import { motion } from 'framer-motion';
 import { MapPin, ArrowLeft, Info, Search } from 'lucide-react';
-import kantoMap from '../KANTO.PNG';
+import kantoMap from '../assets/maps/kanto.png';
+import johtoMap from '../assets/maps/johto.png';
+import hoennMap from '../assets/maps/hoenn.png';
 
-const locations = [
-    { id: 1, name: "Pallet Town", top: "78%", left: "22%", desc: "Where it all begins. A quiet town with a famous laboratory." },
-    { id: 2, name: "Viridian City", top: "62%", left: "22%", desc: "The gateway to the Indigo Plateau." },
-    { id: 3, name: "Pewter City", top: "42%", left: "22%", desc: "A stone-cold city featuring the first Gym." },
-    { id: 4, name: "Cerulean City", top: "32%", left: "48%", desc: "A city surrounded by water." },
-    { id: 5, name: "Vermilion City", top: "58%", left: "48%", desc: "A bustling port city." },
-    { id: 6, name: "Lavender Town", top: "42%", left: "75%", desc: "A spooky town known for the Pokemon Tower." },
-    { id: 7, name: "Celadon City", top: "42%", left: "42%", desc: "The city of rainbow dreams and big department stores." },
-    { id: 8, name: "Fuchsia City", top: "75%", left: "48%", desc: "Home to the Safari Zone." },
-    { id: 9, name: "Saffron City", top: "48%", left: "55%", desc: "The central hub of Kanto." },
-    { id: 10, name: "Cinnabar Island", top: "88%", left: "22%", desc: "A volcanic island known for its laboratory." },
-];
+const REGION_DATA = {
+    kanto: {
+        name: "Kanto",
+        accent: "text-poke-red",
+        border: "border-poke-red/30",
+        bg: "bg-poke-red/10",
+        map: kantoMap,
+        locations: [
+            { id: 1, name: "Pallet Town", top: "78%", left: "22%", desc: "Where it all begins. A quiet town with a famous laboratory." },
+            { id: 2, name: "Viridian City", top: "68%", left: "22%", desc: "A beautiful green city that is enveloped in nature." },
+            { id: 3, name: "Pewter City", top: "48%", left: "22%", desc: "An ancient stone city nestled between rugged mountains." },
+            { id: 4, name: "Cerulean City", top: "38%", left: "48%", desc: "A seaside city that is surrounded by gentle floral scents." },
+            { id: 5, name: "Vermilion City", top: "68%", left: "48%", desc: "A port city that is popular for its beautiful sunsets." },
+            { id: 6, name: "Lavender Town", top: "48%", left: "68%", desc: "A noble town that is dedicated to the spirits of Pokémon." },
+            { id: 7, name: "Celadon City", top: "48%", left: "42%", desc: "The city of rainbow dreams. It is always filled with light." },
+            { id: 8, name: "Saffron City", top: "48%", left: "55%", desc: "The golden city of commerce. It is a major hub of traffic." },
+            { id: 9, name: "Fuchsia City", top: "78%", left: "55%", desc: "A historic city that is famous for its Safari Zone." },
+            { id: 10, name: "Cinnabar Island", top: "88%", left: "22%", desc: "A fiery town that is situated on a volcanic island." }
+        ]
+    },
+    johto: {
+        name: "Johto",
+        accent: "text-poke-yellow",
+        border: "border-poke-yellow/30",
+        bg: "bg-poke-yellow/10",
+        map: johtoMap,
+        locations: [
+            { id: 11, name: "New Bark Town", top: "78%", left: "78%", desc: "The Town Where Winds of a New Beginning Blow." },
+            { id: 12, name: "Cherrygrove City", top: "78%", left: "65%", desc: "The City of Fragrant Flowers." },
+            { id: 13, name: "Violet City", top: "68%", left: "55%", desc: "The City of Nostalgic Scents." },
+            { id: 14, name: "Azalea Town", top: "88%", left: "45%", desc: "Where People and Pokémon Live in Happy Harmony." },
+            { id: 15, name: "Goldenrod City", top: "68%", left: "40%", desc: "The Festive City of Opulence." },
+            { id: 16, name: "Ecruteak City", top: "48%", left: "45%", desc: "A Historical City Where the Past Meets the Present." },
+            { id: 17, name: "Olivine City", top: "58%", left: "30%", desc: "The Port with the Smell of Tide." },
+            { id: 18, name: "Cianwood City", top: "58%", left: "15%", desc: "A Port Surrounded by Rough Seas." },
+            { id: 19, name: "Blackthorn City", top: "38%", left: "65%", desc: "A Quiet Mountain Retreat." },
+            { id: 20, name: "Mt. Silver", top: "48%", left: "78%", desc: "The ultimate challenge awaits here." }
+        ]
+    },
+    hoenn: {
+        name: "Hoenn",
+        accent: "text-poke-blue",
+        border: "border-poke-blue/30",
+        bg: "bg-poke-blue/10",
+        map: hoennMap,
+        locations: [
+            { id: 21, name: "Littleroot Town", top: "85%", left: "35%", desc: "A town that can't be shaded any hue." },
+            { id: 22, name: "Oldale Town", top: "75%", left: "35%", desc: "Where things start off small." },
+            { id: 23, name: "Petalburg City", top: "75%", left: "20%", desc: "Where people mingle with nature." },
+            { id: 24, name: "Rustboro City", top: "55%", left: "15%", desc: "The city probing the integration of nature and science." },
+            { id: 25, name: "Dewford Town", top: "90%", left: "15%", desc: "A tiny island in the blue sea." },
+            { id: 26, name: "Slateport City", top: "85%", left: "50%", desc: "The port where people and Pokémon cross paths." },
+            { id: 27, name: "Mauville City", top: "65%", left: "50%", desc: "The bright and shiny city of fun." },
+            { id: 28, name: "Lavaridge Town", top: "45%", left: "40%", desc: "The center of all of Hoenn's hot springs." },
+            { id: 29, name: "Fortree City", top: "35%", left: "65%", desc: "The treetop city that frolics with nature." },
+            { id: 30, name: "Lilycove City", top: "45%", left: "80%", desc: "Where the land ends and the sea begins." }
+        ]
+    }
+};
 
-const JourneyPage = ({ onBack }) => {
+const JourneyPage = ({ onBack, region = 'kanto' }) => {
+    const activeData = REGION_DATA[region] || REGION_DATA.kanto;
+
     return (
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="relative min-h-screen pt-24 pb-12 px-6 overflow-hidden"
+            className="min-h-screen pt-24 pb-20 px-4 md:px-8 relative z-10"
         >
-            <div className="max-w-7xl mx-auto relative z-10">
+            <div className="max-w-7xl mx-auto">
+                {/* Header Area */}
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
-                    <motion.button
-                        whileHover={{ scale: 1.05, x: -5 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={onBack}
-                        className="flex items-center gap-2 px-6 py-3 glass-morphism rounded-xl text-white font-pixel text-[10px] border-2 border-white/10 hover:border-poke-red transition-colors"
-                    >
-                        <ArrowLeft className="w-4 h-4" /> BACK TO PORTFOLIO
-                    </motion.button>
-
-                    <div className="text-right">
-                        <h1 className="text-2xl md:text-4xl font-pixel text-white mb-2 uppercase tracking-tighter shadow-black drop-shadow-lg">
-                            KANTO <span className="text-poke-red">REGION</span>
+                    <div>
+                        <motion.button
+                            whileHover={{ scale: 1.05, x: -5 }}
+                            whileTap={{ scale: 0.95 }}
+                            onPointerDown={onBack}
+                            className="mb-6 flex items-center gap-2 px-4 py-2 glass-morphism rounded-xl text-white font-pixel text-[10px] border border-white/10 hover:border-white transition-colors"
+                        >
+                            <ArrowLeft className="w-4 h-4" /> BACK TO PORTFOLIO
+                        </motion.button>
+                        <h1 className="text-4xl md:text-6xl font-pixel text-white uppercase tracking-tighter">
+                            {activeData.name} <span className={activeData.accent}>Region</span>
                         </h1>
-                        <p className="text-poke-yellow font-pixel text-[10px] tracking-widest bg-black/40 px-3 py-1 rounded inline-block">
-                            EXPLORATION MODE ACTIVE
+                        <p className="text-gray-400 font-pixel text-[10px] mt-2 tracking-widest uppercase">
+                            EXPLORATION MODE ACTIVE // DISCOVERING {activeData.name}
                         </p>
+                    </div>
+
+                    <div className="glass-morphism px-6 py-4 rounded-2xl border border-white/10 flex items-center gap-4">
+                        <div className={`w-3 h-3 rounded-full animate-pulse ${activeData.bg.replace('/10', '')}`} />
+                        <span className="font-pixel text-[10px] text-white">SYNCING WITH REGIONAL POKÉDEX...</span>
                     </div>
                 </div>
 
-                <div className="grid lg:grid-cols-12 gap-8 items-start">
-                    {/* Main Map View */}
-                    <div className="lg:col-span-8 relative aspect-[4/3] glass-morphism rounded-3xl overflow-hidden border-4 border-white/20 shadow-2xl group">
-                        {/* Map Legend/Overlay */}
-                        <div className="absolute top-6 left-6 z-20 glass-morphism p-4 rounded-2xl border-2 border-white/10 max-w-[200px]">
-                            <h3 className="font-pixel text-[8px] mb-3 text-poke-yellow">REGION LEGEND</h3>
-                            <div className="space-y-2">
-                                <div className="flex items-center gap-2">
-                                    <MapPin className="w-3 h-3 text-poke-red" />
-                                    <span className="font-pixel text-[6px] text-white">MAJOR CITIES</span>
+                <div className="grid lg:grid-cols-12 gap-8">
+                    {/* Left: Interactive Map Container */}
+                    <div className="lg:col-span-8 flex flex-col gap-6">
+                        <div className="relative aspect-[4/3] glass-morphism rounded-[2.5rem] border-4 border-white/10 overflow-hidden group shadow-2xl">
+                            <div className="absolute top-6 left-6 z-20 flex items-center gap-3">
+                                <div className="p-3 glass-morphism rounded-xl border border-white/10">
+                                    <MapPin className={`w-5 h-5 ${activeData.accent}`} />
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <Search className="w-3 h-3 text-poke-blue" />
-                                    <span className="font-pixel text-[6px] text-white">POKEMON SPOTS</span>
-                                </div>
+                                <span className="font-pixel text-xs text-white uppercase drop-shadow-md">
+                                    {activeData.name} Map Detail
+                                </span>
                             </div>
-                        </div>
 
-                        {/* Interactive Map Surface */}
-                        <div className="absolute inset-0 pixelated bg-black/40">
-                            <img
-                                src={kantoMap}
-                                alt="Kanto Map Detail"
-                                className="w-full h-full object-contain opacity-100 brightness-[1.1] group-hover:brightness-125 transition-all duration-500"
-                            />
-                            <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors duration-500" />
-
-                            {locations.map((loc) => (
-                                <motion.div
-                                    key={loc.id}
-                                    initial={{ scale: 0 }}
-                                    animate={{ scale: 1 }}
-                                    transition={{ delay: 0.5 + loc.id * 0.05, type: 'spring' }}
-                                    style={{ top: loc.top, left: loc.left }}
-                                    className="absolute -translate-x-1/2 -translate-y-1/2 z-30 flex flex-col items-center group/pin"
-                                >
-                                    <motion.div
-                                        whileHover={{ scale: 1.2, y: -5 }}
-                                        className="bg-poke-red p-2 rounded-full border-2 border-white shadow-[0_0_15px_rgba(255,0,0,0.5)] cursor-pointer"
-                                    >
-                                        <MapPin className="w-4 h-4 text-white" />
-                                    </motion.div>
-
-                                    <div className="mt-2 px-3 py-1 bg-black/80 backdrop-blur-sm border border-white/20 rounded font-pixel text-[6px] text-white opacity-0 group-hover/pin:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-                                        {loc.name.toUpperCase()}
+                            {/* Region Legend */}
+                            <div className="absolute top-6 right-6 z-20 glass-morphism p-4 rounded-2xl border border-white/10">
+                                <h4 className="font-pixel text-[8px] text-poke-yellow mb-3 uppercase tracking-tighter">Region Legend</h4>
+                                <div className="space-y-2">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-2 h-2 rounded-full bg-poke-red shadow-[0_0_5px_#ff0000]" />
+                                        <span className="text-[7px] font-pixel text-gray-400 uppercase">Major Cities</span>
                                     </div>
-                                </motion.div>
-                            ))}
-                        </div>
-
-                        {/* Professor Oak Message */}
-                        <div className="absolute bottom-6 left-6 right-6 z-20 glass-morphism p-6 rounded-2xl border-2 border-red-500/30 flex gap-6 items-center">
-                            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gray-400 to-gray-600 border-2 border-white/20 shrink-0 flex items-center justify-center overflow-hidden">
-                                <div className="text-white/30 font-pixel text-xs">OAK</div>
+                                    <div className="flex items-center gap-2">
+                                        <Search className="w-2 h-2 text-poke-blue" />
+                                        <span className="text-[7px] font-pixel text-gray-400 uppercase">Pokemon Spots</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <h4 className="font-pixel text-xs text-poke-yellow mb-1 uppercase">PROF. OAK</h4>
-                                <p className="font-sans text-sm text-gray-300 leading-snug">
-                                    "Welcome to the Kanto map! Hover over the red pins to rediscover the landmarks of our region."
-                                </p>
+
+                            {/* Interactive Map Surface */}
+                            <div className={`absolute inset-0 pixelated bg-black/40`}>
+                                <img
+                                    src={activeData.map}
+                                    alt={`${activeData.name} Map Detail`}
+                                    className={`w-full h-full object-contain opacity-100 brightness-[1.1] transition-all duration-1000`}
+                                />
+                                <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors duration-500" />
+
+                                {activeData.locations.map((loc) => (
+                                    <motion.div
+                                        key={loc.id}
+                                        initial={{ opacity: 0, scale: 0 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        whileHover={{ scale: 1.2 }}
+                                        style={{ top: loc.top, left: loc.left }}
+                                        className="absolute z-30 group/pin cursor-pointer"
+                                    >
+                                        <div className="relative">
+                                            <div className={`w-4 h-4 rounded-full border-2 border-white shadow-lg animate-pulse ${region === 'kanto' ? 'bg-poke-red shadow-[0_0_15px_#ff0000]' :
+                                                region === 'johto' ? 'bg-poke-yellow shadow-[0_0_15px_#ffe500]' :
+                                                    'bg-poke-blue shadow-[0_0_15px_#00c3ff]'
+                                                }`} />
+
+                                            {/* Tooltip */}
+                                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-48 opacity-0 group-hover/pin:opacity-100 transition-all duration-300 pointer-events-none translate-y-2 group-hover/pin:translate-y-0">
+                                                <div className="glass-morphism p-3 rounded-xl border border-white/20 shadow-2xl">
+                                                    <h5 className="font-pixel text-[10px] text-white uppercase mb-1">{loc.name}</h5>
+                                                    <p className="font-sans text-[9px] text-gray-400 leading-tight">{loc.desc}</p>
+                                                </div>
+                                                <div className="w-3 h-3 glass-morphism rotate-45 border-r border-b border-white/20 absolute -bottom-1.5 left-1/2 -translate-x-1/2" />
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
+
+                            {/* Professor Oak Message */}
+                            <div className={`absolute bottom-12 left-6 right-6 z-20 glass-morphism p-6 rounded-2xl border-2 flex gap-6 items-center ${activeData.border}`}>
+                                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gray-400 to-gray-600 border-2 border-white/20 shrink-0 flex items-center justify-center overflow-hidden">
+                                    <div className="text-white/30 font-pixel text-xs">OAK</div>
+                                </div>
+                                <div>
+                                    <h4 className={`font-pixel text-[10px] mb-1 uppercase ${activeData.accent}`}>Prof. Oak</h4>
+                                    <p className="text-white/80 font-sans text-xs italic leading-relaxed">
+                                        "Welcome to the {activeData.name} map! Hover over the colored pins to rediscover the landmarks of this beautiful region."
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* Side Info */}
-                    <div className="lg:col-span-4 space-y-6">
-                        <div className="glass-morphism p-8 rounded-3xl border-2 border-white/10">
-                            <h3 className="font-pixel text-sm mb-6 flex items-center gap-3">
-                                <Info className="w-5 h-5 text-poke-blue" />
-                                JOURNEY LOG
-                            </h3>
+                    {/* Right: Region Data/Stats */}
+                    <div className="lg:col-span-4 flex flex-col gap-6">
+                        <div className="glass-morphism rounded-[2.5rem] border-2 border-white/10 p-8 flex-1">
+                            <div className="flex items-center gap-4 mb-8">
+                                <div className="p-3 bg-white/5 rounded-2xl border border-white/10">
+                                    <Info className="w-5 h-5 text-poke-blue" />
+                                </div>
+                                <h3 className="font-pixel text-sm text-white uppercase">Journey Log</h3>
+                            </div>
+
                             <div className="space-y-6">
-                                <div className="p-4 bg-white/5 rounded-xl border border-white/10 hover:border-poke-yellow transition-colors group cursor-default">
-                                    <span className="text-[8px] font-pixel text-gray-500 block mb-2">QUICK TIP</span>
-                                    <p className="text-xs text-gray-300 font-sans group-hover:text-white transition-colors">
-                                        The Kanto region map background helps you visualize the journey from Pallet Town to the Indigo Plateau.
+                                <div className="p-6 bg-white/5 rounded-2xl border border-white/5 group hover:border-white/20 transition-all">
+                                    <h4 className="font-pixel text-[8px] text-gray-500 uppercase mb-3">Quick Tip</h4>
+                                    <p className="text-gray-400 text-xs leading-relaxed group-hover:text-gray-300 transition-colors">
+                                        The {activeData.name} region map helps you visualize your progress as a trainer in this part of the world.
                                     </p>
                                 </div>
-                                <div className="p-4 bg-white/5 rounded-xl border border-white/10">
-                                    <span className="text-[8px] font-pixel text-gray-500 block mb-2">REGIONAL DATA</span>
-                                    <div className="flex justify-between items-end">
-                                        <span className="text-xs font-pixel text-white">DISCOVERED CITIES</span>
-                                        <span className="text-lg font-pixel text-poke-red italic">10 / 10</span>
-                                    </div>
-                                    <div className="mt-4 h-2 bg-black/40 rounded-full overflow-hidden">
-                                        <motion.div
-                                            initial={{ width: 0 }}
-                                            animate={{ width: "100%" }}
-                                            className="h-full bg-gradient-to-r from-poke-red to-poke-yellow"
-                                        />
+
+                                <div className="p-6 bg-white/5 rounded-2xl border border-white/5">
+                                    <h4 className="font-pixel text-[8px] text-gray-500 uppercase mb-4">Regional Data</h4>
+                                    <div className="space-y-4">
+                                        <div className="flex justify-between items-center">
+                                            <span className="font-pixel text-[10px] text-white uppercase">Discovered Cities</span>
+                                            <span className={`font-pixel text-lg ${activeData.accent}`}>10 <span className="text-gray-700">/ 10</span></span>
+                                        </div>
+                                        <div className="h-2 bg-black/40 rounded-full border border-white/5">
+                                            <motion.div
+                                                initial={{ width: 0 }}
+                                                animate={{ width: '100%' }}
+                                                className={`h-full rounded-full ${activeData.bg.replace('/10', '')}`}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div className="glass-morphism p-6 rounded-3xl border-2 border-white/10 bg-poke-blue/5">
-                            <p className="text-[8px] font-pixel text-center text-poke-blue/70 animate-pulse uppercase">
-                                Syncing with Pokedex...
-                            </p>
+                            <div className="mt-12 p-6 glass-morphism rounded-2xl border border-white/10 text-center relative overflow-hidden group">
+                                <div className="relative z-10">
+                                    <motion.div
+                                        animate={{ rotate: 360 }}
+                                        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                                        className="w-12 h-12 border-2 border-dashed border-white/20 rounded-full mx-auto mb-4 flex items-center justify-center"
+                                    >
+                                        <div className="w-2 h-2 bg-poke-red rounded-full animate-ping" />
+                                    </motion.div>
+                                    <p className="font-pixel text-[8px] text-gray-500 uppercase leading-relaxed">
+                                        Syncing with Pokedex...<br />
+                                        Signal Strength: 100%
+                                    </p>
+                                </div>
+                                <div className="absolute inset-0 bg-gradient-to-t from-poke-red/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            {/* Background Decor Specific to this view */}
-            <div className="fixed top-1/4 right-0 w-96 h-96 bg-poke-blue/10 rounded-full blur-[150px] pointer-events-none" />
-            <div className="fixed bottom-1/4 left-0 w-96 h-96 bg-poke-red/10 rounded-full blur-[150px] pointer-events-none" />
         </motion.div>
     );
 };

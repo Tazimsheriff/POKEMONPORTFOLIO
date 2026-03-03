@@ -7,6 +7,7 @@ const projects = [
         id: 1,
         name: "AI Neural Engine",
         type: ["Psychic", "Steel"],
+        category: "AI",
         desc: "A neural networking project that mimics brain synaptic activity for efficient data processing.",
         image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png",
         stats: { complexity: 95, speed: 80, impact: 90 },
@@ -18,6 +19,7 @@ const projects = [
         id: 2,
         name: "Cyber Guard",
         type: ["Dark", "Ghost"],
+        category: "CYBER",
         desc: "Real-time threat detection system with stealth-based architectural monitoring.",
         image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/94.png",
         stats: { complexity: 88, speed: 92, impact: 85 },
@@ -29,6 +31,7 @@ const projects = [
         id: 3,
         name: "Flame Backend",
         type: ["Fire"],
+        category: "WEB",
         desc: "High-performance server architecture optimized for rapid scalability and concurrent traffic.",
         image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png",
         stats: { complexity: 75, speed: 98, impact: 82 },
@@ -40,6 +43,7 @@ const projects = [
         id: 4,
         name: "Aqua Stream",
         type: ["Water", "Ice"],
+        category: "WEB",
         desc: "Real-time data visualization platform with fluid transitions and crystal-clear analytics.",
         image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/9.png",
         stats: { complexity: 82, speed: 75, impact: 88 },
@@ -51,6 +55,7 @@ const projects = [
         id: 5,
         name: "Firewall Core",
         type: ["Fire", "Fighting"],
+        category: "CYBER",
         desc: "Robust security infrastructure designed to withstand intense traffic heat and brute-force attacks.",
         image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/392.png", // Infernape
         stats: { complexity: 85, speed: 90, impact: 88 },
@@ -62,6 +67,7 @@ const projects = [
         id: 6,
         name: "Quick UI Kit",
         type: ["Electric"],
+        category: "WEB",
         desc: "A lightning-fast UI library focused on accessibility and high-voltage performance.",
         image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png", // Pikachu
         stats: { complexity: 70, speed: 100, impact: 85 },
@@ -73,6 +79,7 @@ const projects = [
         id: 7,
         name: "Blaze Runner",
         type: ["Fire", "Fighting"],
+        category: "WEB",
         desc: "High-speed automation runner that burns through CI/CD pipelines with unparalleled efficiency.",
         image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/257.png", // Blaziken
         stats: { complexity: 80, speed: 95, impact: 90 },
@@ -84,6 +91,7 @@ const projects = [
         id: 8,
         name: "Depth Scaler",
         type: ["Water"],
+        category: "WEB",
         desc: "Database scaling solution that navigates deep data structures with predatory precision.",
         image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/160.png", // Feraligatr
         stats: { complexity: 92, speed: 78, impact: 95 },
@@ -112,14 +120,18 @@ const TypeBadge = ({ type }) => {
     );
 };
 
-const ProjectCard = ({ project, onClick }) => (
+const ProjectCard = ({ project, onClick, accentColor }) => (
     <motion.div
+        layout
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.9 }}
         layoutId={`card-${project.id}`}
         onClick={() => onClick(project)}
         whileHover={{ y: -10 }}
-        className="group relative glass-morphism border-2 border-white/5 rounded-2xl p-6 cursor-pointer hover:border-poke-red transition-colors overflow-hidden"
+        className="group relative glass-morphism border-2 border-white/5 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:border-white/20"
     >
-        <div className="absolute top-2 right-4 text-white/10 font-pixel text-2xl group-hover:text-poke-red/20 transition-colors">
+        <div className={`absolute top-2 right-4 text-white/10 font-pixel text-2xl group-hover:${accentColor} opacity-20 transition-colors`}>
             #00{project.id}
         </div>
 
@@ -131,7 +143,7 @@ const ProjectCard = ({ project, onClick }) => (
                 className="w-32 h-32 object-contain mb-4 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]"
             />
 
-            <h3 className="text-sm font-pixel text-center mb-3 group-hover:text-poke-yellow transition-colors">{project.name}</h3>
+            <h3 className={`text-sm font-pixel text-center mb-3 group-hover:${accentColor} transition-colors uppercase`}>{project.name}</h3>
 
             <div className="flex gap-2 mb-4">
                 {project.type.map(t => <TypeBadge key={t} type={t} />)}
@@ -139,42 +151,65 @@ const ProjectCard = ({ project, onClick }) => (
 
             <div className="flex gap-4">
                 <button className="p-2 bg-white/5 rounded-full hover:bg-white/20 transition-colors">
-                    <Info className="w-4 h-4" />
+                    <Info className={`w-4 h-4 ${accentColor}`} />
                 </button>
             </div>
         </div>
-
-        {/* Grid pattern background */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
     </motion.div>
 );
 
-const PokedexGrid = () => {
+const PokedexGrid = ({ region = 'kanto' }) => {
     const [selected, setSelected] = useState(null);
+    const [activeFilter, setActiveFilter] = useState('ALL');
+
+    const accentColor = region === 'johto' ? 'text-poke-yellow' : region === 'hoenn' ? 'text-poke-blue' : 'text-poke-red';
+    const bgColor = region === 'johto' ? 'bg-poke-yellow' : region === 'hoenn' ? 'bg-poke-blue' : 'bg-poke-red';
+    const borderColor = region === 'johto' ? 'border-[#b3a125]' : region === 'hoenn' ? 'border-[#3b4cca]' : 'border-[#800000]';
+
+    const filteredProjects = activeFilter === 'ALL'
+        ? projects
+        : projects.filter(p => p.category === activeFilter);
 
     return (
         <section id="pokedex" className="py-24 px-6 max-w-7xl mx-auto">
             <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
                 <div>
                     <h2 className="text-2xl font-pixel mb-4 flex items-center gap-4">
-                        <span className="w-12 h-1 bg-poke-red inline-block" />
+                        <span className={`w-12 h-1 ${bgColor} inline-block shadow-[0_0_10px_currentColor]`} />
                         PROJECT POKÉDEX
                     </h2>
                     <p className="text-gray-400 font-sans">Click on an entry to see detailed stats and tech stack.</p>
                 </div>
-                <div className="flex bg-[#1a1a1a] p-1 rounded-lg border border-white/10 font-pixel text-[10px]">
-                    <button className="px-4 py-2 bg-poke-red rounded shadow-lg">ALL</button>
-                    <button className="px-4 py-2 text-gray-500 hover:text-white transition-colors">AI</button>
-                    <button className="px-4 py-2 text-gray-500 hover:text-white transition-colors">WEB</button>
-                    <button className="px-4 py-2 text-gray-500 hover:text-white transition-colors">CYBER</button>
+                <div className="flex bg-[#1a1a1a] p-1 rounded-lg border border-white/10 font-pixel text-[10px] overflow-hidden">
+                    {['ALL', 'AI', 'WEB', 'CYBER'].map((cat) => (
+                        <button
+                            key={cat}
+                            onClick={() => setActiveFilter(cat)}
+                            className={`px-4 py-2 transition-all duration-300 rounded ${activeFilter === cat ? `${bgColor} shadow-lg text-white` : 'text-gray-500 hover:text-white'
+                                }`}
+                        >
+                            {cat}
+                        </button>
+                    ))}
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {projects.map(p => (
-                    <ProjectCard key={p.id} project={p} onClick={setSelected} />
-                ))}
-            </div>
+            <motion.div
+                layout
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+            >
+                <AnimatePresence mode="popLayout">
+                    {filteredProjects.map(p => (
+                        <ProjectCard
+                            key={p.id}
+                            project={p}
+                            onClick={setSelected}
+                            accentColor={accentColor}
+                        />
+                    ))}
+                </AnimatePresence>
+            </motion.div>
 
             <AnimatePresence>
                 {selected && (
@@ -193,14 +228,13 @@ const PokedexGrid = () => {
                         >
                             <button
                                 onClick={() => setSelected(null)}
-                                className="absolute top-6 right-6 p-2 bg-black/40 hover:bg-poke-red rounded-full transition-colors z-20"
+                                className={`absolute top-6 right-6 p-2 bg-black/40 hover:${bgColor} rounded-full transition-colors z-20`}
                             >
                                 <X className="w-6 h-6" />
                             </button>
 
                             <div className="grid md:grid-cols-2">
-                                {/* Left: Visuals */}
-                                <div className="bg-[#2a2a2a] p-12 flex flex-col items-center justify-center relative">
+                                <div className="bg-[#111] p-12 flex flex-col items-center justify-center relative">
                                     <motion.img
                                         layoutId={`img-${selected.id}`}
                                         src={selected.image}
@@ -210,29 +244,28 @@ const PokedexGrid = () => {
                                         {selected.type.map(t => <TypeBadge key={t} type={t} />)}
                                     </div>
                                     <div className="absolute bottom-6 left-6 font-pixel text-4xl text-white/5 uppercase">
-                                        V. 1.0.0
+                                        LVL. 99
                                     </div>
                                 </div>
 
-                                {/* Right: Info */}
-                                <div className="p-8 md:p-12 pb-24 relative">
-                                    <h3 className="text-2xl font-pixel mb-6">{selected.name}</h3>
-                                    <p className="text-gray-400 mb-8 leading-relaxed">
+                                <div className="p-8 md:p-12 pb-24 relative bg-black/40">
+                                    <h3 className={`text-2xl font-pixel mb-6 uppercase tracking-widest ${accentColor}`}>{selected.name}</h3>
+                                    <p className="text-gray-400 mb-8 leading-relaxed font-sans text-lg">
                                         {selected.desc}
                                     </p>
 
                                     <div className="space-y-6 mb-12">
                                         {Object.entries(selected.stats).map(([key, val]) => (
                                             <div key={key}>
-                                                <div className="flex justify-between text-[10px] font-pixel mb-2 uppercase">
+                                                <div className="flex justify-between text-[10px] font-pixel mb-2 uppercase tracking-tighter">
                                                     <span className="text-gray-500">{key}</span>
-                                                    <span>{val}%</span>
+                                                    <span className={accentColor}>{val}/100</span>
                                                 </div>
-                                                <div className="h-2 bg-black/30 rounded-full overflow-hidden">
+                                                <div className="h-3 bg-black/40 rounded-full overflow-hidden p-[1px] border border-white/5">
                                                     <motion.div
                                                         initial={{ width: 0 }}
                                                         animate={{ width: `${val}%` }}
-                                                        className="h-full bg-poke-red"
+                                                        className={`h-full ${bgColor} rounded-full shadow-[0_0_10px_currentColor]`}
                                                     />
                                                 </div>
                                             </div>
@@ -241,17 +274,17 @@ const PokedexGrid = () => {
 
                                     <div className="flex flex-wrap gap-2 mb-8">
                                         {selected.tech.map(t => (
-                                            <span key={t} className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs text-gray-300">
+                                            <span key={t} className={`px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] font-pixel text-gray-400`}>
                                                 {t}
                                             </span>
                                         ))}
                                     </div>
 
                                     <div className="flex gap-4 absolute bottom-8 left-8 right-8">
-                                        <a href={selected.github} className="flex-1 flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-colors font-pixel text-[10px]">
+                                        <a href={selected.github} className="flex-1 flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-colors font-pixel text-[10px] text-white">
                                             <Github className="w-4 h-4" /> GITHUB
                                         </a>
-                                        <a href={selected.live} className="flex-1 flex items-center justify-center gap-2 py-3 bg-poke-red hover:bg-red-600 rounded-xl transition-colors font-pixel text-[10px]">
+                                        <a href={selected.live} className={`flex-1 flex items-center justify-center gap-2 py-3 ${bgColor} rounded-xl transition-all font-pixel text-[10px] text-white shadow-xl hover:translate-y-[-2px]`}>
                                             <ExternalLink className="w-4 h-4" /> LIVE DEMO
                                         </a>
                                     </div>
