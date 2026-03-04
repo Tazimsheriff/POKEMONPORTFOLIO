@@ -82,26 +82,26 @@ function App() {
               <div className="scanlines" />
 
               {/* Navbar */}
-              <nav className="fixed top-0 left-0 w-full z-50 p-6 flex justify-between items-center backdrop-blur-sm bg-black/10">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-poke-red rounded-full border-2 border-white flex items-center justify-center">
-                    <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+              <nav className="fixed top-0 left-0 w-full z-50 p-3 sm:p-6 flex justify-between items-center backdrop-blur-sm bg-black/10">
+                <div className="flex items-center gap-1 sm:gap-2">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-poke-red rounded-full border-2 border-white flex items-center justify-center flex-shrink-0">
+                    <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse" />
                   </div>
-                  <span className="font-pixel text-[10px] tracking-widest hidden sm:block uppercase">Trainer Portfolio</span>
+                  <span className="font-pixel text-[7px] sm:text-[10px] tracking-widest hidden sm:block uppercase">Trainer Portfolio</span>
                 </div>
 
-                <div className="flex items-center gap-6">
+                <div className="flex items-center gap-3 sm:gap-6">
                   <button
                     onClick={() => setMuted(!muted)}
-                    className="p-2 border border-white/10 rounded-lg hover:bg-white/5 transition-colors"
+                    className="p-2 border border-white/10 rounded-lg hover:bg-white/5 transition-colors touch-opacity"
                   >
-                    {muted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5 text-poke-yellow" />}
+                    {muted ? <VolumeX className="w-4 h-4 sm:w-5 sm:h-5" /> : <Volume2 className="w-4 h-4 sm:w-5 sm:h-5 text-poke-yellow" />}
                   </button>
                   <button
                     onClick={() => setShowNav(!showNav)}
-                    className="p-2 bg-poke-red rounded-lg text-white hover:bg-red-600 transition-colors"
+                    className="p-2 bg-poke-red rounded-lg text-white hover:bg-red-600 transition-colors touch-opacity"
                   >
-                    <Menu className="w-5 h-5" />
+                    <Menu className="w-5 h-5 sm:w-6 sm:h-6" />
                   </button>
                 </div>
               </nav>

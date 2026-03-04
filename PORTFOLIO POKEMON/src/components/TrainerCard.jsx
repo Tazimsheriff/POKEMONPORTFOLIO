@@ -73,24 +73,24 @@ const TrainerCard = ({ onStartJourney, onStartCatching, region = 'kanto' }) => {
     const hoverBg = region === 'johto' ? 'hover:bg-[#ffe500]' : region === 'hoenn' ? 'hover:bg-[#4a5de8]' : 'hover:bg-[#cc0000]';
 
     return (
-        <section id="home" className="min-h-screen flex items-center justify-center p-6 pt-24">
+        <section id="home" className="min-h-screen flex items-center justify-center p-4 sm:p-6 pt-20 sm:pt-24">
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="relative w-full max-w-4xl glass-morphism border-4 border-white/20 rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)]"
+                className="relative w-full max-w-4xl glass-morphism border-2 sm:border-4 border-white/20 rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)]"
             >
                 {/* Card Header Decoration */}
-                <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-poke-red via-poke-yellow to-poke-blue" />
+                <div className="absolute top-0 left-0 w-full h-1 sm:h-2 bg-gradient-to-r from-poke-red via-poke-yellow to-poke-blue" />
 
-                <div className="grid md:grid-cols-12 gap-8 p-8 md:p-12">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 p-4 sm:p-8 md:p-12">
                     {/* Left: Avatar & XP */}
-                    <div className="md:col-span-4 flex flex-col items-center border-r-2 border-white/5 pr-8">
-                        <div className="relative mb-6">
-                            <div className="w-48 h-48 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center overflow-hidden border-4 border-white/20 shadow-xl">
-                                <User className="w-32 h-32 text-white/50" />
+                    <div className="md:col-span-4 flex flex-col items-center md:border-r-2 border-white/5 md:pr-8 pb-6 md:pb-0 md:border-b-0 border-b-2">
+                        <div className="relative mb-4 sm:mb-6">
+                            <div className="w-32 sm:w-40 md:w-48 h-32 sm:h-40 md:h-48 rounded-xl sm:rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center overflow-hidden border-2 sm:border-4 border-white/20 shadow-xl">
+                                <User className="w-16 sm:w-24 md:w-32 h-16 sm:h-24 md:h-32 text-white/50" />
                             </div>
-                            <div className={`absolute -bottom-4 left-1/2 -translate-x-1/2 ${bgColor} px-4 py-1 rounded-full border-2 border-white font-pixel text-[10px] shadow-lg`}>
+                            <div className={`absolute -bottom-3 sm:-bottom-4 left-1/2 -translate-x-1/2 ${bgColor} px-2 sm:px-4 py-0.5 sm:py-1 rounded-full border-2 border-white font-pixel text-[8px] sm:text-[10px] shadow-lg`}>
                                 LVL. 25
                             </div>
                         </div>
@@ -109,7 +109,7 @@ const TrainerCard = ({ onStartJourney, onStartCatching, region = 'kanto' }) => {
                             </div>
                         </div>
 
-                        <div className="mt-8 grid grid-cols-3 gap-2 w-full">
+                        <div className="mt-6 sm:mt-8 grid grid-cols-3 gap-1 sm:gap-2 w-full">
                             {Object.entries(SKILL_DATA).map(([name, data]) => (
                                 <StarterIcon
                                     key={name}
@@ -125,27 +125,27 @@ const TrainerCard = ({ onStartJourney, onStartCatching, region = 'kanto' }) => {
 
                     {/* Right: Info & Stats */}
                     <div className="md:col-span-8">
-                        <div className="mb-8">
-                            <h1 className="text-3xl md:text-5xl mb-4 text-white uppercase tracking-tighter">
+                        <div className="mb-6 sm:mb-8">
+                            <h1 className="text-2xl sm:text-3xl md:text-5xl mb-3 sm:mb-4 text-white uppercase tracking-tighter">
                                 Tazim <span className={accentColor}>Sheriff</span>
                             </h1>
-                            <p className={`${region === 'hoenn' ? 'text-poke-blue bg-poke-blue/10 border-poke-blue/30' : 'text-poke-yellow bg-poke-yellow/10 border-poke-yellow/30'} font-pixel text-xs tracking-widest inline-block px-3 py-1 rounded border`}>
+                            <p className={`${region === 'hoenn' ? 'text-poke-blue bg-poke-blue/10 border-poke-blue/30' : 'text-poke-yellow bg-poke-yellow/10 border-poke-yellow/30'} font-pixel text-[8px] sm:text-xs tracking-widest inline-block px-2 sm:px-3 py-0.5 sm:py-1 rounded border`}>
                                 FULL STACK DEVELOPER // AI ENTHUSIAST
                             </p>
-                            <p className="mt-6 text-gray-400 leading-relaxed text-lg">
+                            <p className="mt-4 sm:mt-6 text-gray-400 leading-relaxed text-sm sm:text-base md:text-lg">
                                 Building digital experiences that feel like a critical hit.
                                 Passionate about turning complex code into seamless user journeys.
                             </p>
                         </div>
 
-                        <div className="grid md:grid-cols-2 gap-x-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-x-8">
                             <StatBar icon={Target} label="Logic" value={stats.logic} color="from-blue-500 to-cyan-400" />
                             <StatBar icon={Zap} label="Speed" value={stats.speed} color="from-yellow-400 to-orange-500" />
                             <StatBar icon={Shield} label="Security" value={stats.security} color="from-green-500 to-emerald-400" />
                             <StatBar icon={Flame} label="Creativity" value={stats.creativity} color="from-red-500 to-pink-500" />
                         </div>
 
-                        <div className="mt-8 flex flex-wrap gap-4">
+                        <div className="mt-6 sm:mt-8 flex flex-wrap gap-2 sm:gap-4">
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
@@ -153,7 +153,7 @@ const TrainerCard = ({ onStartJourney, onStartCatching, region = 'kanto' }) => {
                                     const el = document.getElementById('pokedex');
                                     if (el) el.scrollIntoView({ behavior: 'smooth' });
                                 }}
-                                className={`px-6 py-3 ${bgColor} text-white font-pixel text-[8px] md:text-[10px] rounded-lg border-b-4 ${borderColor} ${hoverBg} transition-colors`}
+                                className={`px-3 sm:px-6 py-2 sm:py-3 ${bgColor} text-white font-pixel text-[7px] sm:text-[8px] md:text-[10px] rounded-lg border-b-2 sm:border-b-4 ${borderColor} ${hoverBg} transition-colors touch-opacity`}
                             >
                                 VIEW POKEDEX
                             </motion.button>
@@ -161,7 +161,7 @@ const TrainerCard = ({ onStartJourney, onStartCatching, region = 'kanto' }) => {
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={() => onStartJourney && onStartJourney()}
-                                className="px-6 py-3 bg-white text-black font-pixel text-[8px] md:text-[10px] rounded-lg border-b-4 border-gray-300 hover:bg-gray-100 transition-colors"
+                                className="px-3 sm:px-6 py-2 sm:py-3 bg-white text-black font-pixel text-[7px] sm:text-[8px] md:text-[10px] rounded-lg border-b-2 sm:border-b-4 border-gray-300 hover:bg-gray-100 transition-colors touch-opacity"
                             >
                                 START JOURNEY
                             </motion.button>
@@ -169,7 +169,7 @@ const TrainerCard = ({ onStartJourney, onStartCatching, region = 'kanto' }) => {
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={() => onStartCatching && onStartCatching()}
-                                className={`px-6 py-3 ${region === 'kanto' ? 'bg-poke-yellow border-[#b3a125] hover:bg-[#ffe500]' : 'bg-white border-gray-300 hover:bg-gray-100'} text-black font-pixel text-[8px] md:text-[10px] rounded-lg border-b-4 transition-colors`}
+                                className={`px-3 sm:px-6 py-2 sm:py-3 ${region === 'kanto' ? 'bg-poke-yellow border-[#b3a125] hover:bg-[#ffe500]' : 'bg-white border-gray-300 hover:bg-gray-100'} text-black font-pixel text-[7px] sm:text-[8px] md:text-[10px] rounded-lg border-b-2 sm:border-b-4 transition-colors touch-opacity`}
                             >
                                 CATCH 'EM ALL
                             </motion.button>
