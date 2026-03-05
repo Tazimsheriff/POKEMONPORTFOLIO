@@ -165,18 +165,7 @@ const JourneyPage = ({ onBack, region = 'kanto' }) => {
                                 ))}
                             </div>
 
-                            {/* Professor Oak Message */}
-                            <div className={`absolute bottom-12 left-6 right-6 z-20 glass-morphism p-6 rounded-2xl border-2 flex gap-6 items-center ${activeData.border}`}>
-                                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gray-400 to-gray-600 border-2 border-white/20 shrink-0 flex items-center justify-center overflow-hidden">
-                                    <div className="text-white/30 font-pixel text-xs">OAK</div>
-                                </div>
-                                <div>
-                                    <h4 className={`font-pixel text-[10px] mb-1 uppercase ${activeData.accent}`}>Prof. Oak</h4>
-                                    <p className="text-white/80 font-sans text-xs italic leading-relaxed">
-                                        "Welcome to the {activeData.name} map! Hover over the colored pins to rediscover the landmarks of this beautiful region."
-                                    </p>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
 
