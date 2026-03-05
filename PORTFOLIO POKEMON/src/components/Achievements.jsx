@@ -121,11 +121,11 @@ export const PokemonCenter = ({ region = 'kanto' }) => {
     };
 
     return (
-        <section id="contact" className="py-24 px-6 relative">
+        <section id="contact" className="py-16 sm:py-24 px-4 sm:px-6 relative">
             <div className="max-w-4xl mx-auto">
-                <div className={`glass-morphism border-8 ${bgColor.replace('bg-', 'border-')} rounded-[2rem] overflow-hidden shadow-[0_0_50px_${shadowColor}] transition-all duration-1000`}>
+                <div className={`glass-morphism border-4 sm:border-8 ${bgColor.replace('bg-', 'border-')} rounded-lg sm:rounded-[2rem] overflow-hidden shadow-[0_0_50px_${shadowColor}] transition-all duration-1000`}>
                     {/* PC Header */}
-                    <div className={`${bgColor} p-6 flex items-center justify-between transition-colors duration-1000`}>
+                    <div className={`${bgColor} p-4 sm:p-6 flex items-center justify-between transition-colors duration-1000`}>
                         <div className="flex gap-4">
                             <div className="w-6 h-6 bg-white rounded-full animate-pulse shadow-[0_0_10px_#fff]" />
                             <div className="w-6 h-6 bg-white/30 rounded-full" />
@@ -137,30 +137,30 @@ export const PokemonCenter = ({ region = 'kanto' }) => {
                     </div>
 
                     <div className="p-8 md:p-12">
-                        <div className="grid md:grid-cols-2 gap-12">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                             {/* Left: Message & Social Links */}
-                            <div>
+                            <div className="order-2 md:order-1">
                                 <div className="mb-8">
-                                    <h3 className={`font-pixel text-lg mb-6 ${accentColor} transition-colors`}>WELCOME!</h3>
-                                    <p className="text-gray-400 font-sans leading-relaxed text-lg">
+                                    <h3 className={`font-pixel text-sm md:text-lg mb-6 ${accentColor} transition-colors`}>WELCOME!</h3>
+                                    <p className="text-gray-400 font-sans leading-relaxed text-base md:text-lg">
                                         We can heal your project's bugs and restore its full potential.
                                         Leave a message and Nurse Joy (my inbox) will get back to you shortly.
                                     </p>
                                 </div>
 
-                                <div className="space-y-6">
+                                <div className="space-y-4 md:space-y-6">
                                     <a
                                         href="https://github.com/Tazimsheriff"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="flex items-center gap-4 group cursor-pointer hover:scale-105 transition-transform"
+                                        className="flex items-center gap-3 md:gap-4 group cursor-pointer hover:scale-105 transition-transform p-2 rounded-lg hover:bg-white/5"
                                     >
-                                        <div className={`w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center group-hover:${bgColor} transition-colors`}>
-                                            <Github className="w-5 h-5 text-gray-400 group-hover:text-white" />
+                                        <div className={`w-10 h-10 md:w-12 md:h-12 bg-white/5 rounded-xl flex items-center justify-center group-hover:${bgColor} transition-colors flex-shrink-0`}>
+                                            <Github className="w-4 h-4 md:w-5 md:h-5 text-gray-400 group-hover:text-white" />
                                         </div>
-                                        <div>
-                                            <div className="text-[10px] font-pixel text-gray-600">GITHUB</div>
-                                            <div className="text-sm font-pixel text-gray-300 group-hover:text-white">Tazimsheriff</div>
+                                        <div className="min-w-0">
+                                            <div className="text-[8px] md:text-[10px] font-pixel text-gray-600">GITHUB</div>
+                                            <div className="text-xs md:text-sm font-pixel text-gray-300 group-hover:text-white truncate">Tazimsheriff</div>
                                         </div>
                                     </a>
 
@@ -168,34 +168,34 @@ export const PokemonCenter = ({ region = 'kanto' }) => {
                                         href="https://www.linkedin.com/in/tazim-sheriff-r-15a355230/"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="flex items-center gap-4 group cursor-pointer hover:scale-105 transition-transform"
+                                        className="flex items-center gap-3 md:gap-4 group cursor-pointer hover:scale-105 transition-transform p-2 rounded-lg hover:bg-white/5"
                                     >
-                                        <div className={`w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center group-hover:bg-blue-600 transition-colors`}>
-                                            <Linkedin className="w-5 h-5 text-gray-400 group-hover:text-white" />
+                                        <div className={`w-10 h-10 md:w-12 md:h-12 bg-white/5 rounded-xl flex items-center justify-center group-hover:bg-blue-600 transition-colors flex-shrink-0`}>
+                                            <Linkedin className="w-4 h-4 md:w-5 md:h-5 text-gray-400 group-hover:text-white" />
                                         </div>
-                                        <div>
-                                            <div className="text-[10px] font-pixel text-gray-600">LINKEDIN</div>
-                                            <div className="text-sm font-pixel text-gray-300 group-hover:text-white">tazim-sheriff-r</div>
+                                        <div className="min-w-0">
+                                            <div className="text-[8px] md:text-[10px] font-pixel text-gray-600">LINKEDIN</div>
+                                            <div className="text-xs md:text-sm font-pixel text-gray-300 group-hover:text-white truncate">tazim-sheriff-r</div>
                                         </div>
                                     </a>
 
                                     <a
                                         href="mailto:tazimsheriffr@gmail.com"
-                                        className="flex items-center gap-4 group cursor-pointer hover:scale-105 transition-transform"
+                                        className="flex items-center gap-3 md:gap-4 group cursor-pointer hover:scale-105 transition-transform p-2 rounded-lg hover:bg-white/5"
                                     >
-                                        <div className={`w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center group-hover:${bgColor} transition-colors`}>
-                                            <Mail className="w-5 h-5 text-gray-400 group-hover:text-white" />
+                                        <div className={`w-10 h-10 md:w-12 md:h-12 bg-white/5 rounded-xl flex items-center justify-center group-hover:${bgColor} transition-colors flex-shrink-0`}>
+                                            <Mail className="w-4 h-4 md:w-5 md:h-5 text-gray-400 group-hover:text-white" />
                                         </div>
-                                        <div>
-                                            <div className="text-[10px] font-pixel text-gray-600">EMAIL</div>
-                                            <div className="text-sm font-pixel text-gray-300 group-hover:text-white">tazimsheriffr@gmail.com</div>
+                                        <div className="min-w-0">
+                                            <div className="text-[8px] md:text-[10px] font-pixel text-gray-600">EMAIL</div>
+                                            <div className="text-xs md:text-sm font-pixel text-gray-300 group-hover:text-white truncate">tazimsheriffr@gmail.com</div>
                                         </div>
                                     </a>
                                 </div>
                             </div>
 
                             {/* Right: Form */}
-                            <form className="space-y-6" onSubmit={handleSubmit}>
+                            <form className="space-y-4 md:space-y-6 order-1 md:order-2" onSubmit={handleSubmit}>
                                 {submitStatus && (
                                     <motion.div
                                         initial={{ opacity: 0, y: -10 }}
@@ -216,7 +216,7 @@ export const PokemonCenter = ({ region = 'kanto' }) => {
                                 )}
 
                                 <div>
-                                    <label className="font-pixel text-[10px] text-gray-500 mb-2 block uppercase tracking-widest">Your Name</label>
+                                    <label className="font-pixel text-[8px] sm:text-[10px] text-gray-500 mb-2 block uppercase tracking-widest">Your Name</label>
                                     <input
                                         type="text"
                                         name="name"
@@ -224,12 +224,12 @@ export const PokemonCenter = ({ region = 'kanto' }) => {
                                         value={formData.name}
                                         onChange={handleInputChange}
                                         disabled={isSubmitting}
-                                        className={`w-full bg-black/40 border-2 border-white/5 rounded-xl p-4 font-pixel text-xs focus:${borderColor} outline-none transition-colors text-white uppercase disabled:opacity-50`}
+                                        className={`w-full bg-black/40 border-2 border-white/5 rounded-lg sm:rounded-xl p-2 sm:p-4 font-pixel text-xs sm:text-sm focus:${borderColor} outline-none transition-colors text-white uppercase disabled:opacity-50`}
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="font-pixel text-[10px] text-gray-500 mb-2 block uppercase tracking-widest">Your Email</label>
+                                    <label className="font-pixel text-[8px] sm:text-[10px] text-gray-500 mb-2 block uppercase tracking-widest">Your Email</label>
                                     <input
                                         type="email"
                                         name="email"
@@ -237,18 +237,18 @@ export const PokemonCenter = ({ region = 'kanto' }) => {
                                         value={formData.email}
                                         onChange={handleInputChange}
                                         disabled={isSubmitting}
-                                        className={`w-full bg-black/40 border-2 border-white/5 rounded-xl p-4 font-pixel text-xs focus:${borderColor} outline-none transition-colors text-white uppercase disabled:opacity-50`}
+                                        className={`w-full bg-black/40 border-2 border-white/5 rounded-lg sm:rounded-xl p-2 sm:p-4 font-pixel text-xs sm:text-sm focus:${borderColor} outline-none transition-colors text-white uppercase disabled:opacity-50`}
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="font-pixel text-[10px] text-gray-500 mb-2 block uppercase tracking-widest">Inquiry Type</label>
+                                    <label className="font-pixel text-[8px] sm:text-[10px] text-gray-500 mb-2 block uppercase tracking-widest">Inquiry Type</label>
                                     <select
                                         name="type"
                                         value={formData.type}
                                         onChange={handleInputChange}
                                         disabled={isSubmitting}
-                                        className={`w-full bg-black/40 border-2 border-white/5 rounded-xl p-4 font-pixel text-xs focus:${borderColor} outline-none transition-colors text-white appearance-none disabled:opacity-50 cursor-pointer`}
+                                        className={`w-full bg-black/40 border-2 border-white/5 rounded-lg sm:rounded-xl p-2 sm:p-4 font-pixel text-xs sm:text-sm focus:${borderColor} outline-none transition-colors text-white appearance-none disabled:opacity-50 cursor-pointer`}
                                     >
                                         <option>NEW PROJECT JOURNEY</option>
                                         <option>BUG HEALING</option>
@@ -258,7 +258,7 @@ export const PokemonCenter = ({ region = 'kanto' }) => {
                                 </div>
 
                                 <div>
-                                    <label className="font-pixel text-[10px] text-gray-500 mb-2 block uppercase tracking-widest">Message</label>
+                                    <label className="font-pixel text-[8px] sm:text-[10px] text-gray-500 mb-2 block uppercase tracking-widest">Message</label>
                                     <textarea
                                         name="message"
                                         rows="4"
@@ -266,7 +266,7 @@ export const PokemonCenter = ({ region = 'kanto' }) => {
                                         value={formData.message}
                                         onChange={handleInputChange}
                                         disabled={isSubmitting}
-                                        className={`w-full bg-black/40 border-2 border-white/5 rounded-xl p-4 font-pixel text-xs focus:${borderColor} outline-none transition-colors text-white resize-none uppercase disabled:opacity-50`}
+                                        className={`w-full bg-black/40 border-2 border-white/5 rounded-lg sm:rounded-xl p-2 sm:p-4 font-pixel text-xs sm:text-sm focus:${borderColor} outline-none transition-colors text-white resize-none uppercase disabled:opacity-50`}
                                     />
                                 </div>
 
@@ -275,9 +275,9 @@ export const PokemonCenter = ({ region = 'kanto' }) => {
                                     disabled={isSubmitting}
                                     whileHover={{ scale: 1.02, y: -2 }}
                                     whileTap={{ scale: 0.98 }}
-                                    className={`w-full ${bgColor} text-white font-pixel text-sm py-4 rounded-xl flex items-center justify-center gap-3 shadow-[0_0_20px_${shadowColor}] hover:brightness-110 transition-all uppercase disabled:opacity-50 disabled:cursor-not-allowed`}
+                                    className={`w-full ${bgColor} text-white font-pixel text-xs sm:text-sm py-3 sm:py-4 rounded-lg sm:rounded-xl flex items-center justify-center gap-2 sm:gap-3 shadow-[0_0_20px_${shadowColor}] hover:brightness-110 transition-all uppercase disabled:opacity-50 disabled:cursor-not-allowed touch-opacity`}
                                 >
-                                    <Send className="w-5 h-5" />
+                                    <Send className="w-4 h-4 sm:w-5 sm:h-5" />
                                     {isSubmitting ? 'SENDING...' : 'SEND MESSAGE'}
                                 </motion.button>
 
