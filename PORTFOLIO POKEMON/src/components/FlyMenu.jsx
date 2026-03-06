@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Map, Wind, Waves, Compass } from 'lucide-react';
+import { Map, Wind, Waves, Compass, Sparkles, MountainSnow } from 'lucide-react';
 
 const regions = [
     {
@@ -26,6 +26,22 @@ const regions = [
         color: 'bg-poke-blue',
         accent: 'text-poke-blue',
         desc: 'Land and Sea. The ultimate exploration.'
+    },
+    {
+        id: 'kalos',
+        name: 'Kalos',
+        icon: Sparkles,
+        color: 'bg-pink-400',
+        accent: 'text-pink-400',
+        desc: 'Mega Evolution and radiant beauty.'
+    },
+    {
+        id: 'unova',
+        name: 'Unova',
+        icon: MountainSnow,
+        color: 'bg-emerald-400',
+        accent: 'text-emerald-400',
+        desc: 'A region of ideals and truth.'
     }
 ];
 
@@ -57,8 +73,8 @@ const FlyMenu = ({ currentRegion, onTravel }) => {
                                             setIsOpen(false);
                                         }}
                                         className={`group relative flex items-center gap-4 p-4 rounded-2xl border transition-all duration-300 ${currentRegion === r.id
-                                                ? 'bg-white/10 border-white/30 cursor-default'
-                                                : 'bg-black/20 border-white/5 hover:border-white/20 hover:bg-white/5'
+                                            ? 'bg-white/10 border-white/30 cursor-default'
+                                            : 'bg-black/20 border-white/5 hover:border-white/20 hover:bg-white/5'
                                             }`}
                                     >
                                         <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110 ${r.color} border border-white/20`}>
@@ -115,3 +131,4 @@ const FlyMenu = ({ currentRegion, onTravel }) => {
 };
 
 export default FlyMenu;
+
