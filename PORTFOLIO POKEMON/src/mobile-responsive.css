@@ -1,0 +1,97 @@
+/* Mobile and Touch Device Optimizations */
+
+/* Ensure minimum touch target size on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  button,
+  a,
+  input,
+  textarea,
+  select {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Better spacing for touch */
+  button:active,
+  a:active {
+    opacity: 0.8;
+  }
+}
+
+/* Smooth scrolling for all browsers */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Better font rendering */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Prevent zoom on input focus for iOS */
+input,
+input[type="text"],
+input[type="email"],
+textarea,
+select {
+  font-size: 16px;
+  font-size: 1rem;
+}
+
+/* Touch feedback utility */
+.touch-opacity {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.touch-opacity:active {
+  opacity: 0.85;
+}
+
+/* Prevent text selection on tap */
+button {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Better viewport handling */
+@media (max-width: 640px) {
+  /* Reduce excessive padding on small screens */
+  section {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+
+  /* Better navbar spacing */
+  nav {
+    padding-left: max(0.75rem, env(safe-area-inset-left));
+    padding-right: max(0.75rem, env(safe-area-inset-right));
+    padding-top: max(0.75rem, env(safe-area-inset-top));
+  }
+
+  /* Improve readability on mobile */
+  body {
+    font-size: 14px;
+  }
+}
+
+/* Landscape mode adjustments */
+@media (max-height: 600px) and (orientation: landscape) {
+  section {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  h1, h2 {
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Ensure good spacing on tablets */
+@media (min-width: 768px) and (max-width: 1024px) {
+  body {
+    font-size: 15px;
+  }
+}
