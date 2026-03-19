@@ -1,273 +1,343 @@
-import { motion } from 'framer-motion';
-import { MapPin, ArrowLeft, Info, Search } from 'lucide-react';
+import { useState, useCallback, memo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { MapPin, ArrowLeft, X, Briefcase, Heart, BookOpen, Code2, ChevronRight } from 'lucide-react';
 import kantoMap from '../assets/maps/kanto.png';
 import johtoMap from '../assets/maps/johto.png';
 import hoennMap from '../assets/maps/hoenn.png';
 import kalosMap from '../assets/maps/kalos.png';
 import unoveMap from '../assets/maps/unnova.png';
+import { EXPERIENCE_DATA, TYPE_COLORS } from '../data/experiences';
 
-const REGION_DATA = {
-    kanto: {
-        name: "Kanto",
-        accent: "text-poke-red",
-        border: "border-poke-red/30",
-        bg: "bg-poke-red/10",
-        map: kantoMap,
-        locations: [
-            { id: 1, name: "Pallet Town", top: "78%", left: "22%", desc: "Where it all begins. A quiet town with a famous laboratory." },
-            { id: 2, name: "Viridian City", top: "68%", left: "22%", desc: "A beautiful green city that is enveloped in nature." },
-            { id: 3, name: "Pewter City", top: "48%", left: "22%", desc: "An ancient stone city nestled between rugged mountains." },
-            { id: 4, name: "Cerulean City", top: "38%", left: "48%", desc: "A seaside city that is surrounded by gentle floral scents." },
-            { id: 5, name: "Vermilion City", top: "68%", left: "48%", desc: "A port city that is popular for its beautiful sunsets." },
-            { id: 6, name: "Lavender Town", top: "48%", left: "68%", desc: "A noble town that is dedicated to the spirits of Pokémon." },
-            { id: 7, name: "Celadon City", top: "48%", left: "42%", desc: "The city of rainbow dreams. It is always filled with light." },
-            { id: 8, name: "Saffron City", top: "48%", left: "55%", desc: "The golden city of commerce. It is a major hub of traffic." },
-            { id: 9, name: "Fuchsia City", top: "78%", left: "55%", desc: "A historic city that is famous for its Safari Zone." },
-            { id: 10, name: "Cinnabar Island", top: "88%", left: "22%", desc: "A fiery town that is situated on a volcanic island." }
-        ]
-    },
-    johto: {
-        name: "Johto",
-        accent: "text-poke-yellow",
-        border: "border-poke-yellow/30",
-        bg: "bg-poke-yellow/10",
-        map: johtoMap,
-        locations: [
-            { id: 11, name: "New Bark Town", top: "78%", left: "78%", desc: "The Town Where Winds of a New Beginning Blow." },
-            { id: 12, name: "Cherrygrove City", top: "78%", left: "65%", desc: "The City of Fragrant Flowers." },
-            { id: 13, name: "Violet City", top: "68%", left: "55%", desc: "The City of Nostalgic Scents." },
-            { id: 14, name: "Azalea Town", top: "88%", left: "45%", desc: "Where People and Pokémon Live in Happy Harmony." },
-            { id: 15, name: "Goldenrod City", top: "68%", left: "40%", desc: "The Festive City of Opulence." },
-            { id: 16, name: "Ecruteak City", top: "48%", left: "45%", desc: "A Historical City Where the Past Meets the Present." },
-            { id: 17, name: "Olivine City", top: "58%", left: "30%", desc: "The Port with the Smell of Tide." },
-            { id: 18, name: "Cianwood City", top: "58%", left: "15%", desc: "A Port Surrounded by Rough Seas." },
-            { id: 19, name: "Blackthorn City", top: "38%", left: "65%", desc: "A Quiet Mountain Retreat." },
-            { id: 20, name: "Mt. Silver", top: "48%", left: "78%", desc: "The ultimate challenge awaits here." }
-        ]
-    },
-    hoenn: {
-        name: "Hoenn",
-        accent: "text-poke-blue",
-        border: "border-poke-blue/30",
-        bg: "bg-poke-blue/10",
-        map: hoennMap,
-        locations: [
-            { id: 21, name: "Littleroot Town", top: "85%", left: "35%", desc: "A town that can't be shaded any hue." },
-            { id: 22, name: "Oldale Town", top: "75%", left: "35%", desc: "Where things start off small." },
-            { id: 23, name: "Petalburg City", top: "75%", left: "20%", desc: "Where people mingle with nature." },
-            { id: 24, name: "Rustboro City", top: "55%", left: "15%", desc: "The city probing the integration of nature and science." },
-            { id: 25, name: "Dewford Town", top: "90%", left: "15%", desc: "A tiny island in the blue sea." },
-            { id: 26, name: "Slateport City", top: "85%", left: "50%", desc: "The port where people and Pokémon cross paths." },
-            { id: 27, name: "Mauville City", top: "65%", left: "50%", desc: "The bright and shiny city of fun." },
-            { id: 28, name: "Lavaridge Town", top: "45%", left: "40%", desc: "The center of all of Hoenn's hot springs." },
-            { id: 29, name: "Fortree City", top: "35%", left: "65%", desc: "The treetop city that frolics with nature." },
-            { id: 30, name: "Lilycove City", top: "45%", left: "80%", desc: "Where the land ends and the sea begins." }
-        ]
-    },
-    kalos: {
-        name: "Kalos",
-        accent: "text-pink-400",
-        border: "border-pink-400/30",
-        bg: "bg-pink-400/10",
-        map: kalosMap,
-        locations: [
-            { id: 31, name: "Santalune City", top: "85%", left: "15%", desc: "A city where flowers bloom on the prairie." },
-            { id: 32, name: "Aquacorde Town", top: "88%", left: "22%", desc: "A serene seaside town." },
-            { id: 33, name: "Cyllage City", top: "75%", left: "25%", desc: "A city at the foot of a mountain of stones." },
-            { id: 34, name: "Ambrette Town", top: "72%", left: "35%", desc: "A scientific town with ancient history." },
-            { id: 35, name: "Camphrier Town", top: "62%", left: "28%", desc: "A town surrounded by rolling grassland." },
-            { id: 36, name: "Lumiose City", top: "50%", left: "45%", desc: "The center of the Kalos region and hub of culture." },
-            { id: 37, name: "Coumarine City", top: "45%", left: "65%", desc: "A beautiful city by the sea." },
-            { id: 38, name: "Laverre City", top: "35%", left: "55%", desc: "A city that shimmers with fairy magic." },
-            { id: 39, name: "Anistar City", top: "25%", left: "68%", desc: "A mystical city influenced by the stars above." },
-            { id: 40, name: "Snowbelle City", top: "15%", left: "75%", desc: "A beautiful city covered in snow." }
-        ]
-    },
-    unova: {
-        name: "Unova",
-        accent: "text-emerald-400",
-        border: "border-emerald-400/30",
-        bg: "bg-emerald-400/10",
-        map: unoveMap,
-        locations: [
-            { id: 41, name: "Nuvema Town", top: "85%", left: "42%", desc: "A peaceful town where adventurers begin their journey." },
-            { id: 42, name: "Accumula Town", top: "78%", left: "42%", desc: "A town that accumulates fond memories." },
-            { id: 43, name: "Striaton City", top: "68%", left: "38%", desc: "A city with clear stripes of nature and civilization." },
-            { id: 44, name: "Nacrene City", top: "58%", left: "35%", desc: "A city representing the beauty of nature." },
-            { id: 45, name: "Castelia City", top: "48%", left: "48%", desc: "A magnificent metropolis of towering skyscrapers." },
-            { id: 46, name: "Nimbasa City", top: "42%", left: "60%", desc: "A glittering city that never sleeps." },
-            { id: 47, name: "Driftveil City", top: "50%", left: "25%", desc: "A city where the winds blow strong." },
-            { id: 48, name: "Mistralton City", top: "32%", left: "55%", desc: "A city with a strong northerly wind." },
-            { id: 49, name: "Icirrus City", top: "18%", left: "42%", desc: "A city buried under snow and ice." },
-            { id: 50, name: "Opelucid City", top: "25%", left: "70%", desc: "A city where nature and technology coexist." }
-        ]
-    }
+// ── Map images per region ────────────────────────────────────────────────────
+const REGION_MAPS = {
+    kanto:  { map: kantoMap,  accent: 'text-poke-red',     border: 'border-poke-red/40',    pill: 'bg-poke-red' },
+    johto:  { map: johtoMap,  accent: 'text-poke-yellow',  border: 'border-poke-yellow/40', pill: 'bg-poke-yellow' },
+    hoenn:  { map: hoennMap,  accent: 'text-poke-blue',    border: 'border-poke-blue/40',   pill: 'bg-poke-blue' },
+    kalos:  { map: kalosMap,  accent: 'text-pink-400',     border: 'border-pink-400/40',    pill: 'bg-pink-400' },
+    unova:  { map: unoveMap,  accent: 'text-emerald-400',  border: 'border-emerald-400/40', pill: 'bg-emerald-400' },
 };
 
-const JourneyPage = ({ onBack, region = 'kanto' }) => {
-    const activeData = REGION_DATA[region] || REGION_DATA.kanto;
+// ── Type icon helper ─────────────────────────────────────────────────────────
+const TYPE_ICONS = {
+    work:      <Briefcase className="w-3.5 h-3.5" />,
+    volunteer: <Heart className="w-3.5 h-3.5" />,
+    education: <BookOpen className="w-3.5 h-3.5" />,
+    project:   <Code2 className="w-3.5 h-3.5" />,
+};
+const TYPE_LABELS = {
+    work: 'Work', volunteer: 'Volunteer', education: 'Education', project: 'Project',
+};
 
+// ── Experience Detail Modal ──────────────────────────────────────────────────
+const ExperienceModal = memo(({ exp, onClose }) => {
+    if (!exp) return null;
+    const colors = TYPE_COLORS[exp.type] || TYPE_COLORS.work;
     return (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="min-h-screen pt-24 pb-20 px-4 md:px-8 relative z-10"
-        >
-            <div className="max-w-7xl mx-auto">
-                {/* Header Area */}
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
-                    <div>
-                        <motion.button
-                            whileHover={{ scale: 1.05, x: -5 }}
-                            whileTap={{ scale: 0.95 }}
-                            onPointerDown={onBack}
-                            className="mb-6 flex items-center gap-2 px-4 py-2 glass-morphism rounded-xl text-white font-pixel text-[10px] border border-white/10 hover:border-white transition-colors"
-                        >
-                            <ArrowLeft className="w-4 h-4" /> BACK TO PORTFOLIO
-                        </motion.button>
-                        <h1 className="text-4xl md:text-6xl font-pixel text-white uppercase tracking-tighter">
-                            {activeData.name} <span className={activeData.accent}>Region</span>
-                        </h1>
-                        <p className="text-gray-400 font-pixel text-[10px] mt-2 tracking-widest uppercase">
-                            EXPLORATION MODE ACTIVE // DISCOVERING {activeData.name}
-                        </p>
+        <AnimatePresence>
+            <motion.div
+                key="modal-backdrop"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-[500] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
+                onClick={onClose}
+            >
+                <motion.div
+                    key="modal-card"
+                    initial={{ scale: 0.85, opacity: 0, y: 30 }}
+                    animate={{ scale: 1, opacity: 1, y: 0 }}
+                    exit={{ scale: 0.85, opacity: 0, y: 30 }}
+                    transition={{ type: 'spring', damping: 20, stiffness: 250 }}
+                    className="relative w-full max-w-lg glass-morphism rounded-3xl border border-white/15 p-8 shadow-2xl"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    {/* Close button */}
+                    <button
+                        onClick={onClose}
+                        className="absolute top-5 right-5 p-2 rounded-full bg-white/5 hover:bg-white/15 transition-colors"
+                    >
+                        <X className="w-4 h-4 text-white" />
+                    </button>
+
+                    {/* Badge + Type */}
+                    <div className="flex items-center gap-3 mb-5">
+                        <span className="text-4xl leading-none">{exp.badge}</span>
+                        <span className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-pixel uppercase tracking-wider ${colors.tag}`}>
+                            {TYPE_ICONS[exp.type]} {TYPE_LABELS[exp.type]}
+                        </span>
                     </div>
 
-                    <div className="glass-morphism px-6 py-4 rounded-2xl border border-white/10 flex items-center gap-4">
-                        <div className={`w-3 h-3 rounded-full animate-pulse ${activeData.bg.replace('/10', '')}`} />
-                        <span className="font-pixel text-[10px] text-white">SYNCING WITH REGIONAL POKÉDEX...</span>
-                    </div>
-                </div>
+                    {/* Title */}
+                    <h2 className="font-pixel text-xl text-white uppercase leading-tight mb-1">
+                        {exp.name}
+                    </h2>
+                    <p className={`font-pixel text-[11px] uppercase tracking-widest mb-1 ${colors.label}`}>
+                        {exp.org}
+                    </p>
+                    <p className="font-pixel text-[10px] text-gray-500 uppercase mb-6">
+                        {exp.date}
+                    </p>
 
-                <div className="grid lg:grid-cols-12 gap-8">
-                    {/* Left: Interactive Map Container */}
-                    <div className="lg:col-span-8 flex flex-col gap-6">
-                        <div className="relative aspect-[4/3] glass-morphism rounded-[2.5rem] border-4 border-white/10 overflow-hidden group shadow-2xl">
-                            <div className="absolute top-6 left-6 z-20 flex items-center gap-3">
-                                <div className="p-3 glass-morphism rounded-xl border border-white/10">
-                                    <MapPin className={`w-5 h-5 ${activeData.accent}`} />
-                                </div>
-                                <span className="font-pixel text-xs text-white uppercase drop-shadow-md">
-                                    {activeData.name} Map Detail
-                                </span>
-                            </div>
+                    {/* Description */}
+                    <p className="text-gray-300 text-sm leading-relaxed mb-6">
+                        {exp.details}
+                    </p>
 
-                            {/* Region Legend */}
-                            <div className="absolute top-6 right-6 z-20 glass-morphism p-4 rounded-2xl border border-white/10">
-                                <h4 className="font-pixel text-[8px] text-poke-yellow mb-3 uppercase tracking-tighter">Region Legend</h4>
-                                <div className="space-y-2">
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-2 h-2 rounded-full bg-poke-red shadow-[0_0_5px_#ff0000]" />
-                                        <span className="text-[7px] font-pixel text-gray-400 uppercase">Major Cities</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <Search className="w-2 h-2 text-poke-blue" />
-                                        <span className="text-[7px] font-pixel text-gray-400 uppercase">Pokemon Spots</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Interactive Map Surface */}
-                            <div className={`absolute inset-0 pixelated bg-black/40`}>
-                                <img
-                                    src={activeData.map}
-                                    alt={`${activeData.name} Map Detail`}
-                                    className={`w-full h-full object-contain opacity-100 brightness-[1.1] transition-all duration-1000`}
-                                />
-                                <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors duration-500" />
-
-                                {activeData.locations.map((loc) => (
-                                    <motion.div
-                                        key={loc.id}
-                                        initial={{ opacity: 0, scale: 0 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        whileHover={{ scale: 1.2 }}
-                                        style={{ top: loc.top, left: loc.left }}
-                                        className="absolute z-30 group/pin cursor-pointer"
+                    {/* Skills */}
+                    {exp.skills?.length > 0 && (
+                        <div>
+                            <p className="font-pixel text-[8px] text-gray-500 uppercase mb-3 tracking-widest">
+                                Skills Used
+                            </p>
+                            <div className="flex flex-wrap gap-2">
+                                {exp.skills.map((skill) => (
+                                    <span
+                                        key={skill}
+                                        className="px-3 py-1 rounded-lg text-[10px] font-pixel bg-white/5 border border-white/10 text-gray-300 uppercase"
                                     >
-                                        <div className="relative">
-                                            <div className={`w-4 h-4 rounded-full border-2 border-white shadow-lg animate-pulse ${region === 'kanto' ? 'bg-poke-red shadow-[0_0_15px_#ff0000]' :
-                                                region === 'johto' ? 'bg-poke-yellow shadow-[0_0_15px_#ffe500]' :
-                                                region === 'hoenn' ? 'bg-poke-blue shadow-[0_0_15px_#00c3ff]' :
-                                                region === 'kalos' ? 'bg-pink-400 shadow-[0_0_15px_#ec4899]' :
-                                                    'bg-emerald-400 shadow-[0_0_15px_#10b981]'
-                                                }`} />
-
-                                            {/* Tooltip */}
-                                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-48 opacity-0 group-hover/pin:opacity-100 transition-all duration-300 pointer-events-none translate-y-2 group-hover/pin:translate-y-0">
-                                                <div className="glass-morphism p-3 rounded-xl border border-white/20 shadow-2xl">
-                                                    <h5 className="font-pixel text-[10px] text-white uppercase mb-1">{loc.name}</h5>
-                                                    <p className="font-sans text-[9px] text-gray-400 leading-tight">{loc.desc}</p>
-                                                </div>
-                                                <div className="w-3 h-3 glass-morphism rotate-45 border-r border-b border-white/20 absolute -bottom-1.5 left-1/2 -translate-x-1/2" />
-                                            </div>
-                                        </div>
-                                    </motion.div>
+                                        {skill}
+                                    </span>
                                 ))}
                             </div>
+                        </div>
+                    )}
+                </motion.div>
+            </motion.div>
+        </AnimatePresence>
+    );
+});
+ExperienceModal.displayName = 'ExperienceModal';
 
+// ── Map Pin (memoized to avoid re-render) ───────────────────────────────────
+const ExperiencePin = memo(({ exp, onSelect }) => {
+    const colors = TYPE_COLORS[exp.type] || TYPE_COLORS.work;
+    return (
+        <motion.div
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ type: 'spring', damping: 15 }}
+            style={{ top: exp.top, left: exp.left }}
+            className="absolute z-30 hover:z-50 group/pin cursor-pointer"
+            onClick={() => onSelect(exp)}
+        >
+            <div className="relative">
+                {/* Pulsing outer ring */}
+                <div className={`absolute -inset-1.5 rounded-full opacity-40 animate-ping ${colors.dot}`} />
+                <div className="absolute -inset-3 rounded-full bg-white/0 group-hover/pin:bg-white/10 transition-colors duration-200" />
 
+                {/* Pin dot — larger, solid background */}
+                <div className={`w-8 h-8 rounded-full border-2 border-white ${colors.dot} ${colors.glow} transition-transform duration-200 group-hover/pin:scale-125 flex items-center justify-center text-base shadow-lg`}>
+                    <span>{exp.badge}</span>
+                </div>
+
+                {/* Gym number badge */}
+                <div className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-black border border-white/30 rounded-full flex items-center justify-center">
+                    <span className="font-pixel text-[7px] text-white">{exp.id.replace(/\D/g,'')}</span>
+                </div>
+
+                {/* Tooltip on hover — z-[60] ensures it renders above all other pins */}
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-52 z-[60] opacity-0 group-hover/pin:opacity-100 transition-opacity duration-200 pointer-events-none">
+                    <div className="bg-black/90 border border-white/30 p-3 rounded-xl shadow-2xl">
+                        <h5 className="font-pixel text-[10px] text-white uppercase mb-1 leading-tight">{exp.name}</h5>
+                        <p className={`font-pixel text-[8px] uppercase tracking-wide ${colors.label} mb-1.5`}>{exp.org}</p>
+                        <p className="font-pixel text-[8px] text-gray-500 mb-1.5">{exp.date}</p>
+                        <p className="font-sans text-[9px] text-gray-300 leading-tight">{exp.desc}</p>
+                        <div className={`mt-2 pt-2 border-t border-white/10 flex items-center gap-1 font-pixel text-[8px] uppercase ${colors.label}`}>
+                            <ChevronRight className="w-3 h-3" /> Tap to view details
                         </div>
                     </div>
-
-                    {/* Right: Region Data/Stats */}
-                    <div className="lg:col-span-4 flex flex-col gap-6">
-                        <div className="glass-morphism rounded-[2.5rem] border-2 border-white/10 p-8 flex-1">
-                            <div className="flex items-center gap-4 mb-8">
-                                <div className="p-3 bg-white/5 rounded-2xl border border-white/10">
-                                    <Info className="w-5 h-5 text-poke-blue" />
-                                </div>
-                                <h3 className="font-pixel text-sm text-white uppercase">Journey Log</h3>
-                            </div>
-
-                            <div className="space-y-6">
-                                <div className="p-6 bg-white/5 rounded-2xl border border-white/5 group hover:border-white/20 transition-all">
-                                    <h4 className="font-pixel text-[8px] text-gray-500 uppercase mb-3">Quick Tip</h4>
-                                    <p className="text-gray-400 text-xs leading-relaxed group-hover:text-gray-300 transition-colors">
-                                        The {activeData.name} region map helps you visualize your progress as a trainer in this part of the world.
-                                    </p>
-                                </div>
-
-                                <div className="p-6 bg-white/5 rounded-2xl border border-white/5">
-                                    <h4 className="font-pixel text-[8px] text-gray-500 uppercase mb-4">Regional Data</h4>
-                                    <div className="space-y-4">
-                                        <div className="flex justify-between items-center">
-                                            <span className="font-pixel text-[10px] text-white uppercase">Discovered Cities</span>
-                                            <span className={`font-pixel text-lg ${activeData.accent}`}>10 <span className="text-gray-700">/ 10</span></span>
-                                        </div>
-                                        <div className="h-2 bg-black/40 rounded-full border border-white/5">
-                                            <motion.div
-                                                initial={{ width: 0 }}
-                                                animate={{ width: '100%' }}
-                                                className={`h-full rounded-full ${activeData.bg.replace('/10', '')}`}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="mt-12 p-6 glass-morphism rounded-2xl border border-white/10 text-center relative overflow-hidden group">
-                                <div className="relative z-10">
-                                    <motion.div
-                                        animate={{ rotate: 360 }}
-                                        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                                        className="w-12 h-12 border-2 border-dashed border-white/20 rounded-full mx-auto mb-4 flex items-center justify-center"
-                                    >
-                                        <div className="w-2 h-2 bg-poke-red rounded-full animate-ping" />
-                                    </motion.div>
-                                    <p className="font-pixel text-[8px] text-gray-500 uppercase leading-relaxed">
-                                        Syncing with Pokedex...<br />
-                                        Signal Strength: 100%
-                                    </p>
-                                </div>
-                                <div className="absolute inset-0 bg-gradient-to-t from-poke-red/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                            </div>
-                        </div>
-                    </div>
+                    <div className="w-2.5 h-2.5 bg-black/90 border-r border-b border-white/30 rotate-45 absolute -bottom-1.5 left-1/2 -translate-x-1/2" />
                 </div>
             </div>
         </motion.div>
+    );
+});
+ExperiencePin.displayName = 'ExperiencePin';
+
+// ── Experience List (right sidebar) ─────────────────────────────────────────
+const ExperienceList = memo(({ experiences, onSelect }) => (
+    <div className="space-y-3">
+        {experiences.map((exp) => {
+            const colors = TYPE_COLORS[exp.type] || TYPE_COLORS.work;
+            return (
+                <motion.button
+                    key={exp.id}
+                    whileHover={{ x: 4 }}
+                    onClick={() => onSelect(exp)}
+                    className="w-full text-left p-4 rounded-2xl bg-white/5 border border-white/5 hover:border-white/20 transition-colors group"
+                >
+                    <div className="flex items-start gap-3">
+                        <span className="text-2xl leading-none mt-0.5">{exp.badge}</span>
+                        <div className="flex-1 min-w-0">
+                            <p className="font-pixel text-[10px] text-white uppercase leading-tight truncate">{exp.name}</p>
+                            <p className={`font-pixel text-[8px] uppercase tracking-wide mt-0.5 ${colors.label}`}>{exp.org}</p>
+                            <p className="font-pixel text-[8px] text-gray-600 mt-0.5">{exp.date}</p>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-white transition-colors mt-1 flex-shrink-0" />
+                    </div>
+                </motion.button>
+            );
+        })}
+    </div>
+));
+ExperienceList.displayName = 'ExperienceList';
+
+// ── Legend ────────────────────────────────────────────────────────────────────
+const Legend = () => (
+    <div className="glass-morphism p-4 rounded-2xl border border-white/10">
+        <h4 className="font-pixel text-[8px] text-poke-yellow mb-3 uppercase tracking-wider">Legend</h4>
+        <div className="space-y-1.5">
+            {Object.entries(TYPE_COLORS).map(([type, c]) => (
+                <div key={type} className="flex items-center gap-2">
+                    <div className={`w-2.5 h-2.5 rounded-full ${c.dot}`} />
+                    <span className="text-[8px] font-pixel text-gray-400 uppercase">{TYPE_LABELS[type]}</span>
+                </div>
+            ))}
+        </div>
+    </div>
+);
+
+// ── Main JourneyPage ─────────────────────────────────────────────────────────
+const JourneyPage = ({ onBack, region = 'kanto' }) => {
+    const [selectedExp, setSelectedExp] = useState(null);
+    const regionMeta = REGION_MAPS[region] || REGION_MAPS.kanto;
+    const regionData = EXPERIENCE_DATA[region] || EXPERIENCE_DATA.kanto;
+
+    const handleSelect = useCallback((exp) => setSelectedExp(exp), []);
+    const handleClose  = useCallback(() => setSelectedExp(null),  []);
+
+    return (
+        <>
+            {/* Experience Detail Modal */}
+            {selectedExp && <ExperienceModal exp={selectedExp} onClose={handleClose} />}
+
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="min-h-screen pt-24 pb-20 px-4 md:px-8 relative z-10"
+            >
+                <div className="max-w-7xl mx-auto">
+
+                    {/* Header */}
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+                        <div>
+                            <motion.button
+                                whileHover={{ x: -4 }}
+                                whileTap={{ scale: 0.95 }}
+                                onPointerDown={onBack}
+                                className="mb-5 flex items-center gap-2 px-4 py-2 glass-morphism rounded-xl text-white font-pixel text-[10px] border border-white/10 hover:border-white/40 transition-colors"
+                            >
+                                <ArrowLeft className="w-4 h-4" /> BACK TO PORTFOLIO
+                            </motion.button>
+                            <h1 className={`text-4xl md:text-6xl font-pixel text-white uppercase tracking-tighter`}>
+                                {region.charAt(0).toUpperCase() + region.slice(1)}{' '}
+                                <span className={regionMeta.accent}>Journey</span>
+                            </h1>
+                            <p className="text-gray-400 font-pixel text-[10px] mt-2 tracking-widest uppercase">
+                                {regionData.eraLabel} · {regionData.eraSubtitle}
+                            </p>
+                        </div>
+
+                        <div className="glass-morphism px-6 py-4 rounded-2xl border border-white/10 flex items-center gap-3">
+                            <MapPin className={`w-4 h-4 ${regionMeta.accent}`} />
+                            <span className="font-pixel text-[10px] text-white uppercase">
+                                {regionData.experiences?.length ?? 0} Experiences Logged
+                            </span>
+                        </div>
+                    </div>
+
+                    {/* Body Grid */}
+                    <div className="grid lg:grid-cols-12 gap-8">
+
+                        {/* Left: Map with pins */}
+                        <div className="lg:col-span-8">
+                            <div className="relative aspect-[4/3] glass-morphism rounded-[2.5rem] border-2 border-white/10 overflow-hidden shadow-2xl">
+
+                                {/* Legend overlay */}
+                                <div className="absolute top-4 right-4 z-20">
+                                    <Legend />
+                                </div>
+
+                                {/* Region label */}
+                                <div className="absolute top-4 left-4 z-20 glass-morphism px-4 py-2 rounded-xl border border-white/10 flex items-center gap-2">
+                                    <MapPin className={`w-4 h-4 ${regionMeta.accent}`} />
+                                    <span className="font-pixel text-[9px] text-white uppercase">
+                                        {region.charAt(0).toUpperCase() + region.slice(1)} Region
+                                    </span>
+                                </div>
+
+                                {/* Map image + overlays */}
+                                <div className="absolute inset-0 bg-[#0a1220]" />
+                                <img
+                                    src={regionMeta.map}
+                                    alt={`${region} map`}
+                                    className="absolute inset-0 w-full h-full object-contain brightness-110 opacity-95"
+                                    loading="lazy"
+                                />
+                                {/* Very subtle vignette only — keeps map bright but pins still pop */}
+                                <div className="absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-black/25" />
+
+                                {/* Experience pins */}
+                                {regionData.experiences?.map((exp) => (
+                                    <ExperiencePin key={exp.id} exp={exp} onSelect={handleSelect} />
+                                ))}
+                            </div>
+
+                            {/* Hint */}
+                            <p className="font-pixel text-[9px] text-gray-600 uppercase tracking-widest text-center mt-4">
+                                ↑ Click any pin to view experience details
+                            </p>
+                        </div>
+
+                        {/* Right: Experience list sidebar */}
+                        <div className="lg:col-span-4 flex flex-col gap-4">
+                            <div className="glass-morphism rounded-[2.5rem] border border-white/10 p-6 flex-1">
+                                <div className="flex items-center gap-3 mb-6">
+                                    <div className={`w-2.5 h-2.5 rounded-full ${regionMeta.pill}`} />
+                                    <h3 className="font-pixel text-sm text-white uppercase tracking-wider">
+                                        Journey Log
+                                    </h3>
+                                </div>
+
+                                {regionData.experiences?.length > 0 ? (
+                                    <ExperienceList
+                                        experiences={regionData.experiences}
+                                        onSelect={handleSelect}
+                                    />
+                                ) : (
+                                    <div className="text-center py-12">
+                                        <p className="font-pixel text-[9px] text-gray-600 uppercase">
+                                            No experiences logged<br/>in this region yet.
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Quick stat */}
+                            <div className="glass-morphism rounded-2xl border border-white/10 p-5">
+                                <p className="font-pixel text-[8px] text-gray-500 uppercase mb-3">Experience Breakdown</p>
+                                <div className="space-y-2">
+                                    {Object.entries(TYPE_COLORS).map(([type, c]) => {
+                                        const count = regionData.experiences?.filter(e => e.type === type).length ?? 0;
+                                        if (count === 0) return null;
+                                        return (
+                                            <div key={type} className="flex items-center justify-between">
+                                                <div className="flex items-center gap-2">
+                                                    <div className={`w-2 h-2 rounded-full ${c.dot}`} />
+                                                    <span className="font-pixel text-[9px] text-gray-400 uppercase">{TYPE_LABELS[type]}</span>
+                                                </div>
+                                                <span className={`font-pixel text-sm ${c.label}`}>{count}</span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </motion.div>
+        </>
     );
 };
 

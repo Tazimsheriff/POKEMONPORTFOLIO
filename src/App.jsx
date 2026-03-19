@@ -36,11 +36,18 @@ function App() {
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
+    let rafId;
     const handleMouseMove = (e) => {
-      setCursorPos({ x: e.clientX, y: e.clientY });
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        setCursorPos({ x: e.clientX, y: e.clientY });
+      });
     };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      cancelAnimationFrame(rafId);
+    };
   }, []);
 
   return (
@@ -67,14 +74,18 @@ function App() {
               className="relative min-h-screen"
             >
               {/* Enhanced Background Map */}
-              <div className="fixed inset-0 z-[-10] overflow-hidden pointer-events-none">
+              <div className="fixed inset-0 z-[-10] overflow-hidden pointer-events-none" style={{ willChange: 'contents' }}>
                 <img
                   src={region === 'johto' ? johtoMap : region === 'hoenn' ? hoennMap : region === 'kalos' ? kalosMap : region === 'unova' ? unoveMap : kantoMap}
                   alt="Region Map"
-                  className={`w-full h-full object-cover pixelated transition-all duration-1000 ${view === 'journey'
-                    ? 'opacity-60 brightness-[0.8] scale-110'
-                    : 'opacity-40 brightness-[0.6] scale-105'
-                    }`}
+                  style={{
+                    transition: 'opacity 0.8s ease, transform 0.8s ease',
+                    opacity: view === 'journey' ? 0.6 : 0.4,
+                    transform: view === 'journey' ? 'scale(1.1)' : 'scale(1.05)',
+                    filter: view === 'journey' ? 'brightness(0.8)' : 'brightness(0.6)',
+                  }}
+                  className="w-full h-full object-cover pixelated"
+                  loading="eager"
                 />
                 <div className="absolute inset-0 bg-overlay" />
                 <div className="absolute inset-0 bg-vignette" />
