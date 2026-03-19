@@ -1,4 +1,4 @@
-import { useState, useCallback, memo } from 'react';
+import { useState, useCallback, useEffect, useRef, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, ArrowLeft, X, Briefcase, Heart, BookOpen, Code2, ChevronRight } from 'lucide-react';
 import kantoMap from '../assets/maps/kanto.png';
@@ -206,6 +206,53 @@ const JourneyPage = ({ onBack, region = 'kanto' }) => {
     const handleSelect = useCallback((exp) => setSelectedExp(exp), []);
     const handleClose  = useCallback(() => setSelectedExp(null),  []);
 
+    // ── Measure actual rendered image area for precise pin positioning ─────────
+    const imgRef       = useRef(null);
+    const containerRef = useRef(null);
+    const [imgBounds, setImgBounds] = useState({ top: 0, left: 0, width: '100%', height: '100%' });
+
+    const measureImg = useCallback(() => {
+        const img = imgRef.current;
+        const container = containerRef.current;
+        if (!img || !container) return;
+
+        const cRect = container.getBoundingClientRect();
+        // naturalWidth/naturalHeight give us the intrinsic aspect ratio
+        const naturalW = img.naturalWidth  || 1;
+        const naturalH = img.naturalHeight || 1;
+        const imgAspect = naturalW / naturalH;
+        const conAspect = cRect.width / cRect.height;
+
+        let rendW, rendH, rendX, rendY;
+        if (imgAspect > conAspect) {
+            // image is wider → letterboxed top/bottom
+            rendW = cRect.width;
+            rendH = cRect.width / imgAspect;
+            rendX = 0;
+            rendY = (cRect.height - rendH) / 2;
+        } else {
+            // image is taller → pillarboxed left/right
+            rendH = cRect.height;
+            rendW = cRect.height * imgAspect;
+            rendY = 0;
+            rendX = (cRect.width - rendW) / 2;
+        }
+        setImgBounds({ top: rendY, left: rendX, width: rendW, height: rendH });
+    }, []);
+
+    useEffect(() => {
+        const img = imgRef.current;
+        if (!img) return;
+        // If image is already cached and loaded, measure immediately
+        if (img.complete && img.naturalWidth) measureImg();
+        img.addEventListener('load', measureImg);
+        window.addEventListener('resize', measureImg);
+        return () => {
+            img.removeEventListener('load', measureImg);
+            window.removeEventListener('resize', measureImg);
+        };
+    }, [region, measureImg]); // re-measure whenever region (map) changes
+
     return (
         <>
             {/* Experience Detail Modal */}
@@ -252,7 +299,7 @@ const JourneyPage = ({ onBack, region = 'kanto' }) => {
 
                         {/* Left: Map with pins */}
                         <div className="lg:col-span-8">
-                            <div className="relative aspect-[4/3] glass-morphism rounded-[2.5rem] border-2 border-white/10 overflow-hidden shadow-2xl">
+                            <div ref={containerRef} className="relative aspect-[4/3] glass-morphism rounded-[2.5rem] border-2 border-white/10 overflow-hidden shadow-2xl">
 
                                 {/* Legend overlay */}
                                 <div className="absolute top-4 right-4 z-20">
@@ -270,18 +317,30 @@ const JourneyPage = ({ onBack, region = 'kanto' }) => {
                                 {/* Map image + overlays */}
                                 <div className="absolute inset-0 bg-[#0a1220]" />
                                 <img
+                                    ref={imgRef}
                                     src={regionMeta.map}
                                     alt={`${region} map`}
                                     className="absolute inset-0 w-full h-full object-contain brightness-110 opacity-95"
                                     loading="lazy"
+                                    onLoad={measureImg}
                                 />
-                                {/* Very subtle vignette only — keeps map bright but pins still pop */}
+                                {/* Subtle vignette */}
                                 <div className="absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-black/25" />
 
-                                {/* Experience pins */}
-                                {regionData.experiences?.map((exp) => (
-                                    <ExperiencePin key={exp.id} exp={exp} onSelect={handleSelect} />
-                                ))}
+                                {/* Pin overlay — sized/positioned to exactly match the rendered image area */}
+                                <div
+                                    className="absolute"
+                                    style={{
+                                        top:    imgBounds.top,
+                                        left:   imgBounds.left,
+                                        width:  imgBounds.width,
+                                        height: imgBounds.height,
+                                    }}
+                                >
+                                    {regionData.experiences?.map((exp) => (
+                                        <ExperiencePin key={exp.id} exp={exp} onSelect={handleSelect} />
+                                    ))}
+                                </div>
                             </div>
 
                             {/* Hint */}
