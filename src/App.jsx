@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import PokeballLoader from './components/PokeballLoader';
 import TrainerCard from './components/TrainerCard';
@@ -18,6 +18,31 @@ import FlyMenu from './components/FlyMenu';
 function App() {
   const [loading, setLoading] = useState(true);
   const [muted, setMuted] = useState(true);
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    const audio = new Audio('/Theme.mp3');
+    audio.loop = true;
+    audio.volume = 0.4;
+    audio.muted = true;
+    audioRef.current = audio;
+    return () => {
+      audio.pause();
+      audio.src = '';
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!loading && audioRef.current) {
+      audioRef.current.play().catch(() => {});
+    }
+  }, [loading]);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.muted = muted;
+    }
+  }, [muted]);
   const [showNav, setShowNav] = useState(false);
   const [view, setView] = useState('home');
   const [region, setRegion] = useState('kanto');
@@ -105,7 +130,8 @@ function App() {
 
                 <div className="flex items-center gap-3 sm:gap-6">
                   <button
-                    onClick={() => setMuted(!muted)}
+                    onClick={() => setMuted(m => !m)}
+                    title={muted ? 'Unmute Music' : 'Mute Music'}
                     className="p-2 border border-white/10 rounded-lg hover:bg-white/5 transition-colors touch-opacity"
                   >
                     {muted ? <VolumeX className="w-4 h-4 sm:w-5 sm:h-5" /> : <Volume2 className="w-4 h-4 sm:w-5 sm:h-5 text-poke-yellow" />}
