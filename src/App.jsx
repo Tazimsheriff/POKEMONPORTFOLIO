@@ -116,8 +116,7 @@ function App() {
                 <div className="absolute inset-0 bg-vignette" />
               </div>
 
-              {/* Retro Scanline Overlay */}
-              <div className="scanlines" />
+
 
               {/* Navbar */}
               <nav className="fixed top-0 left-0 w-full z-50 p-3 sm:p-6 flex justify-between items-center backdrop-blur-sm bg-black/10">

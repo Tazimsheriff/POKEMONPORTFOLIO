@@ -97,7 +97,7 @@ const PokeballLoader = ({ onComplete }) => {
       ref={containerRef}
       className="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-black overflow-hidden"
     >
-      <div className="scanlines" />
+
 
       <div ref={ballRef} className="relative w-48 h-48 mb-8">
         {/* Top Half */}
