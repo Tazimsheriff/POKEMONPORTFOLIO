@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { User, Zap, Flame, Droplets, Target, Shield } from 'lucide-react';
+import { Zap, Flame, Droplets, Target, Shield } from 'lucide-react';
 
 const SKILL_DATA = {
     'React': {
@@ -88,7 +88,11 @@ const TrainerCard = ({ onStartJourney, onStartCatching, region = 'kanto' }) => {
                     <div className="md:col-span-4 flex flex-col items-center md:border-r-2 border-white/5 md:pr-8 pb-6 md:pb-0 md:border-b-0 border-b-2">
                         <div className="relative mb-4 sm:mb-6">
                             <div className="w-32 sm:w-40 md:w-48 h-32 sm:h-40 md:h-48 rounded-xl sm:rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center overflow-hidden border-2 sm:border-4 border-white/20 shadow-xl">
-                                <User className="w-16 sm:w-24 md:w-32 h-16 sm:h-24 md:h-32 text-white/50" />
+                                <img
+                                    src="/pfp.jpg"
+                                    alt="Trainer"
+                                    className="w-full h-full object-cover"
+                                />
                             </div>
                             <div className={`absolute -bottom-3 sm:-bottom-4 left-1/2 -translate-x-1/2 ${bgColor} px-2 sm:px-4 py-0.5 sm:py-1 rounded-full border-2 border-white font-pixel text-[8px] sm:text-[10px] shadow-lg`}>
                                 LVL. 25
